@@ -1,7 +1,5 @@
 # Proyectos SOA
 
-Los proyectos se encuentran ubicados en la rama develop
-
 1- CalculadoraSOA: ejmplo que consume un wsdl publico que presenta las operaciones registradas en ese contrato
 
 2- Calculadora: ejemplo al cual se le pasa la operacion a realizar
