@@ -1,0 +1,126 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Fri Mar 08 02:11:41 CST 2024
+  Author:  herit
+  Type: BPEL 2.0 Process
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="CalculoProcess" targetNamespace="http://xmlns.oracle.com/SOA_PoC/CalculadoraSOAP/CalculoProcess"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:client="http://xmlns.oracle.com/SOA_PoC/CalculadoraSOAP/CalculoProcess"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:ui="http://xmlns.oracle.com/soa/designer"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:ns1="http://tempuri.org/"
+         xmlns:ns2="http://www.example.org"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+  <import namespace="http://schemas.oracle.com/bpel/extension" location="../WSDLs/RuntimeFault.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/SOA_PoC/CalculadoraSOAP/CalculoProcess"
+          location="../WSDLs/CalculoProcess.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="calculoprocess_client" partnerLinkType="client:CalculoProcess" myRole="CalculoProcessProvider"
+                 partnerRole="CalculoProcessRequester"/>
+    <partnerLink name="CalculoService" partnerLinkType="ns1:CalculoService" partnerRole="CalculatorSoap"/>
+  </partnerLinks>
+  <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:CalculoProcessRequestMessage"/>
+    <!-- Reference to the message that will be sent back to the requester during callback -->
+    <variable name="outputVariable" messageType="client:CalculoProcessResponseMessage"/>
+    <variable name="Invoke1_Add_InputVariable" messageType="ns1:AddSoapIn"/>
+    <variable name="Invoke1_Add_OutputVariable" messageType="ns1:AddSoapOut"/>
+  </variables>
+  <faultHandlers>
+    <catch faultName="bpelx:bindingFault">
+      <sequence name="Error_Sequence" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+        <assign name="Assign2" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+          <copy>
+            <from>concat(ora:getFaultName(),'error ha venido en el flujo catch')</from>
+            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns2:result</to>
+          </copy>
+        </assign>
+        <invoke name="callbackClient" partnerLink="calculoprocess_client" portType="client:CalculoProcessCallback"
+                operation="processResponse" inputVariable="outputVariable"
+                xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/>
+      </sequence>
+    </catch>
+    <catchAll>
+      <sequence name="Error_Sequence">
+        <assign name="Assign2" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+          <copy>
+            <from>concat(ora:getFaultName(),'error ha venido en el flujo catchAll')</from>
+            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns2:result</to>
+          </copy>
+        </assign>
+        <invoke name="callbackClient" partnerLink="calculoprocess_client" portType="client:CalculoProcessCallback"
+                operation="processResponse" inputVariable="outputVariable"
+                xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/>
+      </sequence>
+    </catchAll>
+  </faultHandlers>
+  <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+  <sequence name="main">
+    <!-- Receive input from requestor. (Note: This maps to operation defined in CalculoProcess.wsdl) -->
+    <receive name="receiveInput" partnerLink="calculoprocess_client" portType="client:CalculoProcess"
+             operation="process" variable="inputVariable" createInstance="yes"/>
+    <assign name="Assign1">
+      <copy>
+        <from>$inputVariable.payload/ns2:num1</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke1_Add_InputVariable.parameters/ns1:intA</to>
+      </copy>
+      <copy>
+        <from>$inputVariable.payload/ns2:num2</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke1_Add_InputVariable.parameters/ns1:intB</to>
+      </copy>
+    </assign>
+    <invoke name="Invoke1" bpelx:invokeAsDetail="no" partnerLink="CalculoService" portType="ns1:CalculatorSoap"
+            operation="Add" inputVariable="Invoke1_Add_InputVariable" outputVariable="Invoke1_Add_OutputVariable"/>
+    <assign name="Assign2">
+      <copy>
+        <from>$Invoke1_Add_OutputVariable.parameters/ns1:AddResult</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/ns2:result</to>
+      </copy>
+    </assign>
+    <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+    <invoke name="callbackClient" partnerLink="calculoprocess_client" portType="client:CalculoProcessCallback"
+            operation="processResponse" inputVariable="outputVariable"/>
+  </sequence>
+</process>

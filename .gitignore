@@ -1,0 +1,27 @@
+# Ignorar archivos de configuración de JDeveloper
+.adf/
+.idea/
+.jdeveloper/
+.data/
+
+
+# Ignorar archivos de compilación y despliegue
+deploy/
+dist/
+tmp/
+target/
+classes/
+src/
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de respaldo
+*~
+*.bak
+*.swp
+

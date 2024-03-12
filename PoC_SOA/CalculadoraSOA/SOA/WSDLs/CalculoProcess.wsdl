@@ -1,0 +1,37 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+     name="CalculoProcess"
+     targetNamespace="http://xmlns.oracle.com/SOA_PoC/CalculadoraSOAP/CalculoProcess"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:client="http://xmlns.oracle.com/SOA_PoC/CalculadoraSOAP/CalculoProcess"
+     xmlns:ns1="http://www.example.org"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:ns2="http://schemas.oracle.com/bpel/extension"
+    >
+    <plnk:partnerLinkType name="CalculoProcess">
+        <plnk:role name="CalculoProcessProvider" portType="client:CalculoProcess"/>
+        <plnk:role name="CalculoProcessRequester" portType="client:CalculoProcessCallback"/>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="http://schemas.oracle.com/bpel/extension" location="RuntimeFault.wsdl"/>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://www.example.org" schemaLocation="../Schemas/calculadora.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="CalculoProcessRequestMessage">
+        <wsdl:part name="payload" element="ns1:Request"/>
+    </wsdl:message>
+    <wsdl:message name="CalculoProcessResponseMessage">
+        <wsdl:part name="payload" element="ns1:Response"/>
+    </wsdl:message>
+    <wsdl:portType name="CalculoProcess">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:CalculoProcessRequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="CalculoProcessCallback">
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="client:CalculoProcessResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>
