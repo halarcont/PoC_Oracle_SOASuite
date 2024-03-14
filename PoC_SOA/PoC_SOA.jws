@@ -28,6 +28,7 @@
       <hash><url n="URL" path="Calculadora/Calculadora.jpr"/></hash>
       <hash><url n="URL" path="CalculadoraSOA/CalculadoraSOA.jpr"/></hash>
       <hash><url n="URL" path="MessagePublishService/MessagePublishService.jpr"/></hash>
+      <hash><url n="URL" path="ProcessRunReport/ProcessRunReport.jpr"/></hash>
       <hash><url n="URL" path="XmlToJson/XmlToJson.jpr"/></hash>
       <hash><url n="URL" path="XSLTDemo/XSLTDemo.jpr"/></hash>
    </list>

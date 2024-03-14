@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dgm:gDiagram xmlns:dgm="http://xmlns.oracle.com/sca/soadgm">
+    <dgm:gService name="runreportbpelprocess_client_ep">
+        <dgm:body borderWidth="2" arcRad="20" X="21" Y="41" width="137" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="11" Y="34" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:outputPort name="runreportbpelprocess_client_ep" X="127" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess#wsdl.interface(RunReportBPELProcess)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="20" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>process</dgm:item>
+        </dgm:operations>
+    </dgm:gService>
+    <dgm:gReference name="RuReportSOAPReference">
+        <dgm:body borderWidth="2" arcRad="20" X="956" Y="41" width="136" height="168">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="946" Y="34" width="156" height="182">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="RuReportSOAPReference" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/oxp/service/PublicReportService#wsdl.interface(PublicReportService)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>logout</dgm:item>
+            <dgm:item>impersonate</dgm:item>
+            <dgm:item>getReportParameters</dgm:item>
+            <dgm:item>createReport</dgm:item>
+            <dgm:item>deleteReport</dgm:item>
+            <dgm:item>validateLogin</dgm:item>
+            <dgm:item>login</dgm:item>
+            <dgm:item>getSecurityModel</dgm:item>
+            <dgm:item>getBIPHTTPSessionInterval</dgm:item>
+            <dgm:item>runReport</dgm:item>
+            <dgm:item>runReportInSession</dgm:item>
+            <dgm:item>getReportDefinition</dgm:item>
+            <dgm:item>getReportDefinitionInSession</dgm:item>
+            <dgm:item>getReportParametersInSession</dgm:item>
+            <dgm:item>getTemplateParameters</dgm:item>
+            <dgm:item>getTemplateParametersInSession</dgm:item>
+            <dgm:item>getFolderContents</dgm:item>
+            <dgm:item>getFolderContentsInSession</dgm:item>
+            <dgm:item>getDeliveryServiceDefinition</dgm:item>
+            <dgm:item>getDeliveryServiceDefinitionInSession</dgm:item>
+            <dgm:item>deliveryService</dgm:item>
+            <dgm:item>deliveryServiceInSession</dgm:item>
+            <dgm:item>scheduleReport</dgm:item>
+            <dgm:item>scheduleReportInSession</dgm:item>
+            <dgm:item>hasReportAccess</dgm:item>
+            <dgm:item>hasReportAccessInSession</dgm:item>
+            <dgm:item>isReportExist</dgm:item>
+            <dgm:item>isReportExistInSession</dgm:item>
+            <dgm:item>isFolderExist</dgm:item>
+            <dgm:item>isFolderExistInSession</dgm:item>
+            <dgm:item>getScheduledReportStatus</dgm:item>
+            <dgm:item>getScheduledReportStatusInSession</dgm:item>
+            <dgm:item>getListOfScheduledReportsStatus</dgm:item>
+            <dgm:item>getListOfScheduledReportsStatusInSession</dgm:item>
+            <dgm:item>getScheduledReportInfo</dgm:item>
+            <dgm:item>getScheduledReportInfoInSession</dgm:item>
+            <dgm:item>getScheduledReportHistoryInfo</dgm:item>
+            <dgm:item>getScheduledReportHistoryInfoInSession</dgm:item>
+            <dgm:item>suspendScheduledReport</dgm:item>
+            <dgm:item>suspendScheduledReportInSession</dgm:item>
+            <dgm:item>resumeScheduledReport</dgm:item>
+            <dgm:item>resumeScheduledReportInSession</dgm:item>
+            <dgm:item>deleteScheduledReport</dgm:item>
+            <dgm:item>deleteScheduledReportInSession</dgm:item>
+            <dgm:item>deleteScheduledReportHistory</dgm:item>
+            <dgm:item>deleteScheduledReportHistoryInSession</dgm:item>
+            <dgm:item>createReportInSession</dgm:item>
+            <dgm:item>updateReportDefinition</dgm:item>
+            <dgm:item>removeObjectFromCache</dgm:item>
+            <dgm:item>updateReportDefinitionInSession</dgm:item>
+            <dgm:item>removeObjectFromCacheInSession</dgm:item>
+            <dgm:item>createReportFolder</dgm:item>
+            <dgm:item>createReportFolderInSession</dgm:item>
+            <dgm:item>uploadTemplateForReport</dgm:item>
+            <dgm:item>uploadTemplateForReportInSession</dgm:item>
+            <dgm:item>removeTemplateForReport</dgm:item>
+            <dgm:item>removeTemplateForReportInSession</dgm:item>
+            <dgm:item>uploadReportDataChunk</dgm:item>
+            <dgm:item>downloadReportDataChunk</dgm:item>
+            <dgm:item>uploadReport</dgm:item>
+            <dgm:item>uploadReportInSession</dgm:item>
+            <dgm:item>deleteReportInSession</dgm:item>
+            <dgm:item>deleteFolder</dgm:item>
+            <dgm:item>deleteFolderInSession</dgm:item>
+            <dgm:item>getTemplate</dgm:item>
+            <dgm:item>getReportSampleData</dgm:item>
+            <dgm:item>getReportSampleDataInSession</dgm:item>
+            <dgm:item>getXDOSchema</dgm:item>
+            <dgm:item>getXDOSchemaInSession</dgm:item>
+            <dgm:item>getTemplateInSession</dgm:item>
+            <dgm:item>createReportWithDataModel</dgm:item>
+            <dgm:item>createReportWithDataModelInSession</dgm:item>
+            <dgm:item>updateTemplateForReport</dgm:item>
+            <dgm:item>updateTemplateForReportInSession</dgm:item>
+            <dgm:item>uploadXLIFFForReport</dgm:item>
+            <dgm:item>updateXLIFFForReportInSession</dgm:item>
+            <dgm:item>updateXLIFFForReport</dgm:item>
+            <dgm:item>uploadXLIFFForReportInSession</dgm:item>
+            <dgm:item>uploadReportObject</dgm:item>
+            <dgm:item>uploadReportObjectInSession</dgm:item>
+            <dgm:item>downloadReportObject</dgm:item>
+            <dgm:item>downloadReportObjectInSession</dgm:item>
+            <dgm:item>getObjectSecurityXML</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gComponent name="RunReportBPELProcess">
+        <dgm:body borderWidth="2" arcRad="20" X="492" Y="26" width="130" height="61">
+            <dgm:borderColor r="69" g="113" b="140"/>
+            <dgm:lightBgColor r="166" g="208" b="230"/>
+            <dgm:darkBgColor r="99" g="162" b="201"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="482" Y="19" width="150" height="77">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="runreportbpelprocess_client" X="-10" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess#wsdl.interface(RunReportBPELProcess)"/>
+        <dgm:outputPort name="RuReportSOAPReference" X="120" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/oxp/service/PublicReportService#wsdl.interface(PublicReportService)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/bpel/shared/plugins/resources/images/soa/process_20x20.png" X="10" Y="4" width="20" height="20"/>
+    </dgm:gComponent>
+    <dgm:gWireLink source="runreportbpelprocess_client_ep" target="RunReportBPELProcess/runreportbpelprocess_client" width="2">
+        <dgm:gSegment X1="168" Y1="51" X2="482" Y2="51"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="RunReportBPELProcess/RuReportSOAPReference" target="RuReportSOAPReference" width="2">
+        <dgm:gSegment X1="632" Y1="51" X2="946" Y2="51"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+</dgm:gDiagram>

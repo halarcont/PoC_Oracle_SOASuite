@@ -1,0 +1,198 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Mar 13 16:08:07 CDT 2024
+  Author:  isild
+  Type: BPEL 2.0 Process
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="RunReportBPELProcess"
+               targetNamespace="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:ui="http://xmlns.oracle.com/soa/designer"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.oracle.com/oxp/service/PublicReportService"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.puntonet.org/bics">
+<import location="java.util.Date" importType="http://schemas.oracle.com/bpel/extension/java"/>
+<import location="oracle.xml.parser.v2.XMLElement" importType="http://schemas.oracle.com/bpel/extension/java"/>
+    <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" location="../WSDLs/RunReportBPELProcess.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="runreportbpelprocess_client" partnerLinkType="client:RunReportBPELProcess" myRole="RunReportBPELProcessProvider"/>
+    <partnerLink name="RuReportSOAPReference" partnerLinkType="ns1:RuReportSOAPReference"
+                 partnerRole="PublicReportService"/>
+  </partnerLinks>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:RunReportBPELProcessRequestMessage"/>
+
+    <!-- Reference to the message that will be returned to the requester-->
+    <variable name="outputVariable"
+              messageType="client:RunReportBPELProcessResponseMessage"/>
+    <variable name="Invoke1_RunReportService_runReport_InputVariable" messageType="ns1:runReportRequest"/>
+    <variable name="Invoke1_RunReportService_runReport_OutputVariable" messageType="ns1:runReportResponse"/>
+    <variable name="decodedValue" type="xsd:string"/>
+    <variable name="base64EncodedString" type="xsd:base64Binary"/>
+    <variable name="resulReport" element="DATA_DS_ELEMENT"/>
+    
+  </variables>
+
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+
+    <!-- Receive input from requestor. (Note: This maps to operation defined in RunReportBPELProcess.wsdl) -->
+    <receive name="receiveInput" partnerLink="runreportbpelprocess_client" portType="client:RunReportBPELProcess" operation="process" variable="inputVariable" createInstance="yes"/>
+    <scope name="Scope1">
+<!--
+      <faultHandlers>
+        <catch faultName="bpelx:remoteFault" faultVariable="remoteFault" faultMessageType="bpelx:RuntimeFaultMessage">
+          <sequence name="Sequence4">
+            <extensionActivity>
+              <bpelx:exec name="Java_Embedding2">
+                <![CDATA[try{
+System.out.println(new Date() + "#### CTS-Error 01: Error Invocando el Servicio de SCM - RemoteFault");
+//XMLElement inputValue = (XMLElement)getVariableData("faultTimeOut","detail"); 
+//String inputVal = inputValue.getTextContent();
+//System.out.println("#### CTS-Error 02: Detalle del Error "+inputVal);
+
+}catch(Exception e){
+System.out.println("#### CTS-Error 01: Excepcion en el JAVA ");
+    e.printStackTrace();
+}]]>
+              </bpelx:exec>
+            </extensionActivity>
+            <rethrow name="Rethrow1"/>
+          </sequence>
+        </catch>
+        <catch faultName="bpelx:timeout" faultVariable="faultTimeOut" faultMessageType="bpelx:RuntimeFaultMessage">
+          <sequence name="Sequence3">
+            <extensionActivity>
+              <bpelx:exec name="Java_Embedding1">
+                <![CDATA[try{
+System.out.println("#### CTS-Error 01: Error Invocando el Servicio de SCM Timeout");
+//XMLElement inputValue = (XMLElement)getVariableData("faultTimeOut","detail"); 
+//String inputVal = inputValue.getTextContent();
+//System.out.println("#### CTS-Error 01: Detalle del Error "+inputVal);
+
+}catch(Exception e){
+    System.out.println("#### CTS-Error 01: Excepcion en el JAVA ");
+    e.printStackTrace();
+}]]>
+              </bpelx:exec>
+            </extensionActivity>
+            <rethrow name="Rethrow2"/>
+          </sequence>
+        </catch>
+        <catchAll>
+          <sequence name="Sequence2">
+            <extensionActivity>
+              <bpelx:exec name="Java_Embedding3">
+                <![CDATA[System.out.println("#### CTS-Error 03: Error Invocando el Servicio de SCM - GeneralFault");]]>
+              </bpelx:exec>
+            </extensionActivity>
+            <rethrow name="Rethrow3"/>
+          </sequence>
+        </catchAll>
+      </faultHandlers>
+-->    
+      <sequence name="Sequence1">
+    <assign name="TransformationinputBPELtoInputRunReport">
+      <bpelx:annotation>
+        <bpelx:pattern patternName="bpelx:transformation"></bpelx:pattern>
+      </bpelx:annotation>
+      <copy>
+        <from>ora:doXSLTransformForDoc("../Transformations/TransformationinputBPELtoInputRunReport_1.xsl", $inputVariable.payload)</from>
+        <to variable="Invoke1_RunReportService_runReport_InputVariable" part="parameters"/>
+      </copy>
+    </assign>
+    <invoke name="Invoke1_RunReportService" bpelx:invokeAsDetail="no" partnerLink="RuReportSOAPReference"
+            portType="ns1:PublicReportService" operation="runReport"
+            inputVariable="Invoke1_RunReportService_runReport_InputVariable"
+            outputVariable="Invoke1_RunReportService_runReport_OutputVariable"/>
+    
+        <assign name="AssignBaseCode">
+      <copy>
+        <from>$Invoke1_RunReportService_runReport_OutputVariable.parameters/ns1:runReportReturn/ns1:reportBytes</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$base64EncodedString</to>
+      </copy>
+    </assign>
+        <extensionActivity>
+          <bpelx:exec name="decodingReport">
+        <![CDATA[try {    
+String encodedData = (String)getVariableData("base64EncodedString");   
+   
+oracle.soa.common.util.Base64Decoder decoder = new oracle.soa.common.util.Base64Decoder();   
+   
+String decodedData = null;    
+decodedData = decoder.decode(encodedData);    
+setVariableData("decodedValue",decodedData);   
+ addAuditTrailEntry(" decodedValue -->  "+ decodedData);   
+} catch (Exception e) {    
+e.printStackTrace();    
+addAuditTrailEntry(e);    
+}]]>
+      </bpelx:exec>
+        </extensionActivity>
+        <assign name="parserXML">
+      <copy>
+        <from>ora:parseEscapedXML($decodedValue)</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$resulReport</to>
+      </copy>
+    </assign>
+    <assign name="TransformationResponseRunReportToBPEL">
+      <bpelx:annotation>
+        <bpelx:pattern patternName="bpelx:transformation"></bpelx:pattern>
+      </bpelx:annotation>
+      <copy>
+        <from>ora:doXSLTransformForDoc("../Transformations/Transformation1_1.xsl", $resulReport)</from>
+        <to variable="outputVariable" part="payload"/>
+      </copy>
+    </assign>
+      
+      
+      </sequence>
+    </scope>
+    <!-- Generate reply to synchronous request -->
+    <reply name="replyOutput" partnerLink="runreportbpelprocess_client" portType="client:RunReportBPELProcess" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>
