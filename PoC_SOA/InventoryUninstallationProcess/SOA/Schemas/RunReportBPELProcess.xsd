@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" xmlns:run="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="process">
+      <complexType>
+         <sequence>
+            <element name="subinventory" type="string"/>
+            <element name="organization" type="string"/>
+            <element name="item" type="string"/>
+            <element name="locator" type="string"/>
+         </sequence>
+      </complexType>
+   </element>
+   <element name="processResponse">
+      <complexType>
+         <sequence>
+            <element name="result" type="run:responseCT"/>
+         </sequence>
+      </complexType>
+   </element>
+   <complexType name="responseCT">
+      <sequence>
+         <element type="string" name="message"/>
+         <element type="string" name="cause"/>
+         <element type="string" name="code"/>
+         <element name="ON_HAND_QUANTITY" type="integer"/>
+      </sequence>
+   </complexType>
+   <complexType name="faultType">
+      <sequence>
+         <element type="string" name="errorCode"/>
+         <element type="string" name="cause"/>
+         <element type="string" name="message"/>
+      </sequence>
+   </complexType>
+</schema>

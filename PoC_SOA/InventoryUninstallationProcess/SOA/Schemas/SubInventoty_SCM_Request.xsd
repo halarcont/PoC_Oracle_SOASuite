@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://TargetNamespace.com/SubInventario_SCM_Request" targetNamespace="http://TargetNamespace.com/SubInventario_SCM_Request" elementFormDefault="qualified">
+   <xsd:element name="body_request">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="AssetSubinventory" type="xsd:string"/>
+            <xsd:element name="DefaultCountTypeCode" type="xsd:string"/>
+            <xsd:element name="Depreciable" type="xsd:string"/>
+            <xsd:element name="Description" type="xsd:string"/>
+            <xsd:element name="LocatorControl" type="xsd:string"/>
+            <xsd:element name="ParLocation" type="xsd:string"/>
+            <xsd:element name="QuantityTracked" type="xsd:string"/>
+            <xsd:element name="SecondaryInventoryName" type="xsd:string"/>
+            <xsd:element name="SubinventoryType" type="xsd:string"/>
+            <xsd:element name="OrganizationCode" type="xsd:string"/>
+            <xsd:element name="MaterialStatusCode" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="body_request_consult">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="q" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+</xsd:schema>

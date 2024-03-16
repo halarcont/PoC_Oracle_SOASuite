@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<properties>
+   <entry key="SCM_ORGANIZATION:db_column_1">TYPE_ORG</entry>
+   <entry key="SCM_ORGANIZATION:db_column_0">CODE</entry>
+   <entry key="SCM_ORGANIZATION:db_table_type">TABLE</entry>
+   <entry key="SCM_ORGANIZATION.CODE:db_column_not_null">true</entry>
+   <entry key="SCM_ORGANIZATION.STATE:db_column_type">NUMBER</entry>
+   <entry key="SCM_ORGANIZATION.DESCRIPTION:db_column_size">200</entry>
+   <entry key="SCM_ORGANIZATION.STATE:db_column_not_null">false</entry>
+   <entry key="SCM_ORGANIZATION.TYPE_ORG:db_column_type">VARCHAR2</entry>
+   <entry key="SCM_ORGANIZATION.CODE:db_column_type">VARCHAR2</entry>
+   <entry key="SCM_ORGANIZATION.DESCRIPTION:db_column_not_null">true</entry>
+   <entry key="return_single_result_set">false</entry>
+   <entry key="SCM_ORGANIZATION.STATE:db_column_precision">1</entry>
+   <entry key="SCM_ORGANIZATION.TYPE_ORG:db_column_not_null">true</entry>
+   <entry key="SCM_ORGANIZATION.TYPE_ORG:db_column_size">50</entry>
+   <entry key="root_descriptor_alias">SCM_ORGANIZATION</entry>
+   <entry key="SCM_ORGANIZATION.CODE:db_column_size">50</entry>
+   <entry key="SCM_ORGANIZATION.STATE:db_column_scale">0</entry>
+   <entry key="SCM_ORGANIZATION.DESCRIPTION:db_column_type">VARCHAR2</entry>
+   <entry key="SCM_ORGANIZATION:db_column_3">STATE</entry>
+   <entry key="SCM_ORGANIZATION:db_column_2">DESCRIPTION</entry>
+</properties>

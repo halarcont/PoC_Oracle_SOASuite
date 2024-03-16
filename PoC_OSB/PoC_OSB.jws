@@ -30,6 +30,17 @@
    <list n="listOfChildren">
       <hash><url n="URL" path="CON_Calculadora/CON_Calculadora.jpr"/></hash>
       <hash><url n="URL" path="EXP_Calculadora/EXP_Calculadora.jpr"/></hash>
+      <hash><url n="URL" path="CON_REST_SOA_AceptacionTerminos/CON_REST_SOA_AceptacionTerminos.jpr"/></hash>
+      <hash><url n="URL" path="CON_REST_SOA_ConsultarSaldoBalance/CON_REST_SOA_ConsultarSaldoBalance.jpr"/></hash>
+      <hash><url n="URL" path="CON_REST_SOA_CreateSession/CON_REST_SOA_CreateSession.jpr"/></hash>
+      <hash><url n="URL" path="CON_REST_SOA_HistorialPagos/CON_REST_SOA_HistorialPagos.jpr"/></hash>
+      <hash><url n="URL" path="CON_REST_SOA_StatusSession/CON_REST_SOA_StatusSession.jpr"/></hash>
+      <hash><url n="URL" path="EXP_AceptacionTerminos/EXP_AceptacionTerminos.jpr"/></hash>
+      <hash><url n="URL" path="EXP_ConsultarSaldoBalance/EXP_ConsultarSaldoBalance.jpr"/></hash>
+      <hash><url n="URL" path="EXP_CreateSession/EXP_CreateSession.jpr"/></hash>
+      <hash><url n="URL" path="EXP_HistorialPagos/EXP_HistorialPagos.jpr"/></hash>
+      <hash><url n="URL" path="EXP_StatusSession/EXP_StatusSession.jpr"/></hash>
+
    </list>
    <hash n="oracle.jdeveloper.deploy.dt.DeploymentProfiles">
       <hash n="profileDefinitions">

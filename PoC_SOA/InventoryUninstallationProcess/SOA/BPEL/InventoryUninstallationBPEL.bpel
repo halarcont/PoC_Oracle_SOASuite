@@ -1,0 +1,1104 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Jun 15 18:03:31 COT 2022
+  Author:  david
+  Purpose: Synchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="InventoryUninstallationBPEL"
+         targetNamespace="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/InventoryUninstallationBPEL"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:client="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/InventoryUninstallationBPEL"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:ns1="http://xmlns.oracle.com/pcbpel/adapter/jms/SOA_DEV/InventoryUninstallationProcess/ConsumeMsgInventoryUninstallation"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer"
+         xmlns:ns2="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/CommonUtility"
+         xmlns:ns3="http://xmlns.oracle.com/pcbpel/adapter/db/SOA_DEV/InventoryUninstallationProcess/DB_ORGANIZATION"
+         xmlns:ns4="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv"
+         xmlns:ns5="http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl" xmlns:ns6="urn:toa:outbound"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns7="http://xmlns.ec.com.puntonet/Common/Utility/SOA" xmlns:ns8="puntonet:oracle:ofsc"
+         xmlns:ns9="http://xmlns.oracle.com/pcbpel/adapter/db/top/DB_ORGANIZATION"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns10="urn:puntonet:ofsc:scm"
+         xmlns:ns11="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/SubInventorySCM"
+         xmlns:ns12="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/ConsultOrderOFSC_OSB"
+         xmlns:ns13="http://TargetNamespace.com/SubInventario_SCM_Request"
+         xmlns:ns14="http://TargetNamespace.com/SubInventario_SCM_Response"
+         xmlns:ns15="http://www.puntonet.ec/ConsultOrder"
+         xmlns:ns16="http://xmlns.oracle.com/pcbpel/adapter/jms/MyServiceSOA/InventoryUninstallationProcess/ProduceJMSNotification"
+         xmlns:ns17="http://xmlns.ec.com.puntonet/Util/Core/NotificationEmail/V1"
+         xmlns:ns18="http://xmlns.oracle.com/apps/scm/inventory/materialAvailability/onhandQuantities/onhandQuantityServiceV2/"
+         xmlns:ns19="http://xmlns.oracle.com/apps/scm/inventory/materialAvailability/onhandQuantities/onhandQuantityServiceV2/types/"
+         xmlns:ns20="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess">
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      PARTNERLINKS                                                      
+      List of services participating in this BPEL process               
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <import namespace="http://schemas.oracle.com/bpel/extension" location="../WSDLs/RuntimeFault.wsdl"
+          importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/jms/SOA_DEV/InventoryUninstallationProcess/ConsumeMsgInventoryUninstallation"
+          location="../WSDLs/ConsumeMsgInventoryUninstallation.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"
+          ui:processWSDL="true"/>
+  <partnerLinks>
+    <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="inventoryuninstallationbpel_client" partnerLinkType="ns1:Consume_Message_InvUninst_plt"
+                 myRole="Consume_Message_InvUninst_role"/>
+    <partnerLink name="CommonUtility" partnerLinkType="ns2:CommonUtility" partnerRole="CommonUtilityProvider"/>
+    <partnerLink name="DB_ORGANIZATION" partnerLinkType="ns3:DB_ORGANIZATION_plt" partnerRole="DB_ORGANIZATION_role"/>
+    <partnerLink name="RunReport" partnerLinkType="ns4:ProcessRunReportBICSProv"
+                 partnerRole="ProcessRunReportBICSProvProvider"/>
+    <partnerLink name="TransferInventory" partnerLinkType="ns5:ProcessTransferInventoryOFSCtoSCMImpl"
+                 partnerRole="ProcessTransferInventoryOFSCtoSCMImplProvider"/>
+    <partnerLink name="OutboundOFSC" partnerLinkType="ns6:OutboundOFSC" partnerRole="ToaPortType"/>
+    <partnerLink name="SubInventorySCM" partnerLinkType="ns11:SubInventorySCM" partnerRole="SubInventorySCMProvider"/>
+    <partnerLink name="ProduceJMSNotification" partnerLinkType="ns16:Produce_Message_plt"
+                 partnerRole="Produce_Message_role"/>
+    <partnerLink name="RunReportQuantity" partnerLinkType="ns20:RunReportBPELProcess"
+                 partnerRole="RunReportBPELProcessProvider"/>
+  </partnerLinks>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      VARIABLES                                                        
+      List of messages and XML documents used within this BPEL process 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <variables>
+    <!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="ns1:Consume_Message_InvUninst_msg"/>
+    <variable name="vUserOFSC" type="xsd:string"/>
+    <variable name="Invoke_CommonUtility_getAuth_InputVariable" messageType="ns2:getAuth_inputMessage"/>
+    <variable name="Invoke_CommonUtility_getAuth_OutputVariable" messageType="ns2:getAuth_outputMessage"/>
+    <variable name="Invoke_Outbound_set_message_status_InputVariable"
+              messageType="ns6:set_message_status_request_data"/>
+    <variable name="Invoke_Outbound_set_message_status_OutputVariable"
+              messageType="ns6:set_message_status_response_data"/>
+    <variable name="Invoke_DB_ORGANIZATION_selectByPrimaryKey_InputVariable"
+              messageType="ns3:selectByPrimaryKey_inputParameters"/>
+    <variable name="Invoke_DB_ORGANIZATION_selectByPrimaryKey_OutputVariable"
+              messageType="ns3:ScmOrganizationCollection_msg"/>
+    <variable name="Invoke_RunReport_process_InputVariable" messageType="ns4:ProcessRunReportBICSProvRequestMessage"/>
+    <variable name="Invoke_RunReport_process_OutputVariable" messageType="ns4:ProcessRunReportBICSProvResponseMessage"/>
+    <variable name="Invoke_TransferInventory_process_InputVariable"
+              messageType="ns5:ProcessTransferInventoryOFSCtoSCMImplRequestMessage"/>
+    <variable name="Invoke_TransferInventory_process_OutputVariable"
+              messageType="ns5:ProcessTransferInventoryOFSCtoSCMImplResponseMessage"/>
+    <variable name="Invoke_RunReport2_process_InputVariable" messageType="ns4:ProcessRunReportBICSProvRequestMessage"/>
+    <variable name="Invoke_RunReport2_process_OutputVariable"
+              messageType="ns4:ProcessRunReportBICSProvResponseMessage"/>
+    <variable name="vStock" type="xsd:integer"/>
+    <variable name="vError" type="xsd:boolean">
+      <from>false()</from>
+    </variable>
+    <variable name="InvokeConsultaSub_ConsultarSub_InputVariable" messageType="ns11:ConsultarSub_inputMessage"/>
+    <variable name="InvokeConsultaSub_ConsultarSub_OutputVariable" messageType="ns11:ConsultarSub_outputMessage"/>
+    <variable name="InvokeCreateSub_CrearSub_InputVariable" messageType="ns11:CrearSub_inputMessage"/>
+    <variable name="InvokeCreateSub_CrearSub_OutputVariable" messageType="ns11:CrearSub_outputMessage"/>
+    <variable name="NumRetryUninstallation" type="xsd:string"/>
+    <variable name="InvokeJSMCompletedProcess_Produce_Message_InputVariable" messageType="ns16:Produce_Message_msg"/>
+    <variable name="varCodeIntegration" type="xsd:string"/>
+    <variable name="varNameIntegration" type="xsd:string"/>
+    <variable name="varMessageMail" type="xsd:string"/>
+    <variable name="flagQuantityInvalid" type="xsd:boolean"/>
+    <variable name="csfKey_Variable" type="xsd:string"/>
+    <variable name="onhand_quantity" type="xsd:decimal"/>
+    <variable name="description" type="xsd:string"/>
+    <variable name="data" type="xsd:string"/>
+    <variable name="InvokeRunReportQuantity_process_InputVariable"
+              messageType="ns20:RunReportBPELProcessRequestMessage"/>
+    <variable name="InvokeRunReportQuantity_process_OutputVariable"
+              messageType="ns20:RunReportBPELProcessResponseMessage"/>
+  </variables>
+  <faultHandlers>
+    <catchAll>
+      <if name="If_GetAuth">
+        <condition>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:result/ns7:code = 0</condition>
+        <sequence name="Sequence1">
+          <assign name="Assign_Outbound">
+            <copy>
+              <from>$vUserOFSC</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+            </copy>
+            <copy>
+              <from>$inputVariable.body/ns8:company_msg</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+            </copy>
+            <copy>
+              <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+            </copy>
+            <copy>
+              <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+            </copy>
+            <copy>
+              <from>$inputVariable.body/ns8:message_id</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+            </copy>
+            <copy>
+              <from>"failed"</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+            </copy>
+            <copy>
+              <from>concat('Ocurrio un error en el proceso de desinstalación de inventario. FlowId:',ora:getFlowId())</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+            </copy>
+            <copy>
+              <from>'#params?xi_activation_error=Ocurrio un error en el proceso de desinstalación del inventario&amp;xi_activation_status=&amp;xa_substatus=error_provisioning'</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+            </copy>
+          </assign>
+          <invoke name="Invoke_Outbound" bpelx:invokeAsDetail="no" partnerLink="OutboundOFSC" portType="ns6:ToaPortType"
+                  operation="set_message_status" inputVariable="Invoke_Outbound_set_message_status_InputVariable"
+                  outputVariable="Invoke_Outbound_set_message_status_OutputVariable"/>
+        </sequence>
+      </if>
+    </catchAll>
+  </faultHandlers>
+  <!-- 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC                                               
+     Set of activities coordinating the flow of messages across the    
+     services integrated within this business process                  
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <sequence name="main">
+    <!-- Receive input from requestor. (Note: This maps to operation defined in InventoryUninstallationBPEL.wsdl) -->
+    <receive name="receiveInput" partnerLink="inventoryuninstallationbpel_client"
+             portType="ns1:Consume_Message_InvUninst_ptt" operation="Consume_Message_InvUninst" variable="inputVariable"
+             createInstance="yes"/>
+    <assign name="Assign_CommonUtility">
+      <copy>
+        <from>"client_rest_api"</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vUserOFSC</to>
+      </copy>
+      <copy>
+        <from>$vUserOFSC</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_CommonUtility_getAuth_InputVariable.request/ns7:user</to>
+      </copy>
+      <copy>
+        <from>ora:getPreference('clientSecret')</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_CommonUtility_getAuth_InputVariable.request/ns7:password</to>
+      </copy>
+    </assign>
+    <assign name="AssignInicialize">
+      <copy>
+        <from>0</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$NumRetryUninstallation</to>
+      </copy>
+      <copy>
+        <from><literal>GENERAL_ERROR</literal></from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$varCodeIntegration</to>
+      </copy>
+      <copy>
+        <from>concat('CREATE_SUBINVENTORY_ ',$inputVariable.body/ns8:integration_type)</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$varNameIntegration</to>
+      </copy>
+    </assign>
+    <scope name="ScopeValidacion" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <faultHandlers>
+        <catch faultName="bpelx:bindingFault" faultVariable="varBindingFault"
+               faultMessageType="bpelx:RuntimeFaultMessage">
+          <sequence name="Sequence16">
+            <assign name="AssignContentMail">
+              <copy>
+                <from>concat('Error en la creación de SubInvetario:  ' ,$inputVariable.body/ns8:xa_plan_code, ', para numero de orden: ',$inputVariable.body/ns8:appt_number)</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$varMessageMail</to>
+              </copy>
+            </assign>
+            <assign name="AssignInputMailJMS">
+              <copy>
+                <from><literal>-1</literal></from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:Type</to>
+              </copy>
+              <copy>
+                <from>$varBindingFault.code</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ExecutionDetail/ns17:CodeError</to>
+              </copy>
+              <copy>
+                <from>$varBindingFault.summary</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ExecutionDetail/ns17:DescriptionError</to>
+              </copy>
+              <copy>
+                <from>$varCodeIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationCode</to>
+              </copy>
+              <copy>
+                <from>$varNameIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationName</to>
+              </copy>
+              <copy>
+                <from>$varMessageMail</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ContentEmail</to>
+              </copy>
+            </assign>
+            <invoke name="InvokeJSMCompletedProcess" partnerLink="ProduceJMSNotification"
+                    portType="ns16:Produce_Message_ptt" operation="Produce_Message"
+                    inputVariable="InvokeJSMCompletedProcess_Produce_Message_InputVariable" bpelx:invokeAsDetail="no"/>
+          </sequence>
+        </catch>
+        <catch faultName="bpelx:remoteFault" faultVariable="varRemoteFault"
+               faultMessageType="bpelx:RuntimeFaultMessage"><sequence name="Sequence17"><assign name="AssignContentMail"
+                                                                                                xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+              <copy>
+                <from>concat('Error en la creación de SubInvetario:  ' ,$inputVariable.body/ns8:xa_plan_code, ', para numero de orden: ',$inputVariable.body/ns8:appt_number)</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$varMessageMail</to>
+              </copy>
+            </assign><assign name="AssignInputMailJMS"
+                                                                                                                                                                                                                                                            xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+              <copy>
+                <from><literal>-1</literal></from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:Type</to>
+              </copy>
+              <copy>
+                <from>$varRemoteFault.code</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ExecutionDetail/ns17:CodeError</to>
+              </copy>
+              <copy>
+                <from>$varRemoteFault.summary</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ExecutionDetail/ns17:DescriptionError</to>
+              </copy>
+              <copy>
+                <from>$varCodeIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationCode</to>
+              </copy>
+              <copy>
+                <from>$varNameIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationName</to>
+              </copy>
+              <copy>
+                <from>$varMessageMail</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ContentEmail</to>
+              </copy>
+            </assign><invoke name="InvokeJSMCompletedProcess"
+                                                                                                                                                                                                                                                            partnerLink="ProduceJMSNotification"
+                                                                                                                                                                                                                                                            portType="ns16:Produce_Message_ptt"
+                                                                                                                                                                                                                                                            operation="Produce_Message"
+                                                                                                                                                                                                                                                            inputVariable="InvokeJSMCompletedProcess_Produce_Message_InputVariable"
+                                                                                                                                                                                                                                                            bpelx:invokeAsDetail="no"
+                                                                                                                                                                                                                                                            xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+                                                                                                                                                                                                                                                            xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></sequence></catch>
+        <catchAll><sequence name="Sequence18"><assign name="AssignContentMail"
+                                                      xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+              <copy>
+                <from>concat('Error en la creación de SubInvetario:  ' ,$inputVariable.body/ns8:xa_plan_code, ', para numero de orden: ',$inputVariable.body/ns8:appt_number)</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$varMessageMail</to>
+              </copy>
+            </assign><assign name="AssignInputMailJMS"
+                                                                                                                                                                                                                  xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+              <copy>
+                <from><literal>-1</literal></from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:Type</to>
+              </copy>
+              <copy>
+                <from>$varCodeIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationCode</to>
+              </copy>
+              <copy>
+                <from>$varNameIntegration</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:IntegrationName</to>
+              </copy>
+              <copy>
+                <from>$varMessageMail</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ContentEmail</to>
+              </copy>
+              <copy>
+                <from><literal>-1</literal></from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeJSMCompletedProcess_Produce_Message_InputVariable.body/ns17:NotificationHeader/ns17:ExecutionDetail/ns17:CodeError</to>
+              </copy>
+            </assign><invoke name="InvokeJSMCompletedProcess"
+                                                                                                                                                                                                                  partnerLink="ProduceJMSNotification"
+                                                                                                                                                                                                                  portType="ns16:Produce_Message_ptt"
+                                                                                                                                                                                                                  operation="Produce_Message"
+                                                                                                                                                                                                                  inputVariable="InvokeJSMCompletedProcess_Produce_Message_InputVariable"
+                                                                                                                                                                                                                  bpelx:invokeAsDetail="no"
+                                                                                                                                                                                                                  xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+                                                                                                                                                                                                                  xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"/></sequence></catchAll>
+      </faultHandlers>
+      <sequence name="Sequence12">
+        <scope name="Scope_Consulta_CreacionSubInventario">
+          <faultHandlers>
+            <catchAll>
+              <if name="If_Catch_Process">
+                <condition>$NumRetryUninstallation &lt;3</condition>
+                <sequence name="Sequence15">
+                  <assign name="Assign_Num_Process">
+                    <copy>
+                      <from>$NumRetryUninstallation +1</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$NumRetryUninstallation</to>
+                    </copy>
+                  </assign>
+                  <wait name="Wait_Process">
+                    <for>'PT30S'</for>
+                  </wait>
+                  <extensionActivity>
+                    <bpelx:replay name="Replay_Process_Consulta_Creación" scope="Scope_Consulta_CreacionSubInventario"/>
+                  </extensionActivity>
+                </sequence>
+                <else>
+                  <rethrow name="Rethrow_Process"/>
+                </else>
+              </if>
+            </catchAll>
+          </faultHandlers>
+          <sequence>
+            <assign name="Assign_Consulta" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+              <copy>
+                <from>concat('OrganizationCode=PTN_CLIE;SecondaryInventoryName=',$inputVariable.body/ns8:xa_plan_code)</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeConsultaSub_ConsultarSub_InputVariable.request/ns13:q</to>
+              </copy>
+            </assign>
+            <invoke name="InvokeConsultaSub" partnerLink="SubInventorySCM" portType="ns11:SubInventorySCM_ptt"
+                    operation="ConsultarSub" inputVariable="InvokeConsultaSub_ConsultarSub_InputVariable"
+                    outputVariable="InvokeConsultaSub_ConsultarSub_OutputVariable"
+                    xmlns:bpelx="http://schemas.oracle.com/bpel/extension" bpelx:invokeAsDetail="no">
+              <bpelx:toProperties>
+                <bpelx:toProperty name="rest.binding.http.Content-Type">"application/vnd.oracle.adf.resourceitem+json"</bpelx:toProperty>
+              </bpelx:toProperties>
+            </invoke>
+            <if name="If_Create">
+              <condition>$InvokeConsultaSub_ConsultarSub_OutputVariable.reply/ns14:count=0</condition>
+              <sequence name="Sequence13">
+                <assign name="Assign_Create" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                  <copy>
+                    <from>"1"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:AssetSubinventory</to>
+                  </copy>
+                  <copy>
+                    <from>$inputVariable.body/ns8:xa_plan_code</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:SecondaryInventoryName</to>
+                  </copy>
+                  <copy>
+                    <from>substring($inputVariable.body/ns8:cname,1,49)</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:Description</to>
+                  </copy>
+                  <copy>
+                    <from>"4"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:DefaultCountTypeCode</to>
+                  </copy>
+                  <copy>
+                    <from>"2"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:Depreciable</to>
+                  </copy>
+                  <copy>
+                    <from>"1"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:LocatorControl</to>
+                  </copy>
+                  <copy>
+                    <from>"2"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:ParLocation</to>
+                  </copy>
+                  <copy>
+                    <from>"1"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:QuantityTracked</to>
+                  </copy>
+                  <copy>
+                    <from>"1"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:SubinventoryType</to>
+                  </copy>
+                  <copy>
+                    <from>"PTN_CLIE"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:OrganizationCode</to>
+                  </copy>
+                  <copy>
+                    <from>"Active"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeCreateSub_CrearSub_InputVariable.request/ns13:MaterialStatusCode</to>
+                  </copy>
+                </assign>
+                <invoke name="InvokeCreateSub" partnerLink="SubInventorySCM" portType="ns11:SubInventorySCM_ptt"
+                        operation="CrearSub" inputVariable="InvokeCreateSub_CrearSub_InputVariable"
+                        outputVariable="InvokeCreateSub_CrearSub_OutputVariable"
+                        xmlns:bpelx="http://schemas.oracle.com/bpel/extension" bpelx:invokeAsDetail="no"/>
+              </sequence>
+            </if>
+          </sequence>
+        </scope>
+      </sequence>
+    </scope>
+    <invoke name="Invoke_CommonUtility" bpelx:invokeAsDetail="no" partnerLink="CommonUtility"
+            portType="ns2:CommonUtility_ptt" operation="getAuth"
+            inputVariable="Invoke_CommonUtility_getAuth_InputVariable"
+            outputVariable="Invoke_CommonUtility_getAuth_OutputVariable"/>
+    <if name="IsNotOperationalError">
+      <condition>concat($inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_reason_remove,'') != 'ERROR_OPERATIVO'</condition>
+      <sequence name="Sequence2">
+        <assign name="Assign_FlagQuantityInvalid">
+          <copy>
+            <from>false()</from>
+            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$flagQuantityInvalid</to>
+          </copy>
+        </assign>
+        <if name="QuantityEmpty">
+          <condition>string-length($inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity) = 0</condition>
+          <sequence name="Sequence19">
+            <assign name="Assign_OnhandQuantityService">
+              <copy>
+                <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory/ns8:xi_subinventory</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeRunReportQuantity_process_InputVariable.payload/ns20:subinventory</to>
+              </copy>
+              <copy>
+                <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory/ns8:xi_warehouse</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeRunReportQuantity_process_InputVariable.payload/ns20:organization</to>
+              </copy>
+              <copy>
+                <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory/ns8:xi_product_code</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeRunReportQuantity_process_InputVariable.payload/ns20:item</to>
+              </copy>
+              <copy>
+                <from>$inputVariable.body/ns8:external_id</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeRunReportQuantity_process_InputVariable.payload/ns20:locator</to>
+              </copy>
+            </assign>
+            <invoke name="InvokeRunReportQuantity" partnerLink="RunReportQuantity"
+                    portType="ns20:RunReportBPELProcess" operation="process"
+                    inputVariable="InvokeRunReportQuantity_process_InputVariable"
+                    outputVariable="InvokeRunReportQuantity_process_OutputVariable" bpelx:invokeAsDetail="no"/>
+            <assign name="Assign_OnhandQuantity">
+              <copy>
+                <from>$InvokeRunReportQuantity_process_OutputVariable.payload/ns20:result/ns20:ON_HAND_QUANTITY</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$onhand_quantity</to>
+              </copy>
+            </assign>
+            <if name="QuantityInvalid">
+              <condition>string-length($inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:inventory_quantity)=0 or string-length($onhand_quantity)=0 or $inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:inventory_quantity &lt;= $onhand_quantity</condition>
+              <assign name="Assign_InvalidQuantity">
+                <copy>
+                  <from>true()</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$flagQuantityInvalid</to>
+                </copy>
+                <copy>
+                  <from>concat('Error con cantidad de inventario inválida. Por favor Validar con el Administrador del Sistema. FlowId:', ora:getFlowId() )</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$description</to>
+                </copy>
+                <copy>
+                  <from>'#params?xi_activation_error= Error con cantidad de inventario inválida. Por favor validar con el Administrador del Sistema..&amp;xi_activation_status=&amp;xa_substatus=error_provisioning'</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$data</to>
+                </copy>
+              </assign>
+              <else>
+                <assign name="Assign_NewValueQuantity">
+                  <copy>
+                    <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:inventory_quantity - $onhand_quantity</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity</to>
+                  </copy>
+                </assign>
+              </else>
+            </if>
+          </sequence>
+        </if>
+        <if name="EquipmentRecovery">
+          <condition>(string-length($inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_recovery_equipment)=0 or  $inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_recovery_equipment = 1)  and $flagQuantityInvalid = false()</condition>
+          <sequence name="Sequence3">
+            <assign name="Assign_DB_ORGANIZATION">
+              <copy>
+                <from><literal>DISPONIBLES_PUNTONET</literal></from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_DB_ORGANIZATION_selectByPrimaryKey_InputVariable.selectByPrimaryKey_inputParameters/ns9:code</to>
+              </copy>
+            </assign>
+            <invoke name="Invoke_DB_ORGANIZATION" partnerLink="DB_ORGANIZATION" portType="ns3:DB_ORGANIZATION_ptt"
+                    operation="selectByPrimaryKey" bpelx:invokeAsDetail="no"
+                    inputVariable="Invoke_DB_ORGANIZATION_selectByPrimaryKey_InputVariable"
+                    outputVariable="Invoke_DB_ORGANIZATION_selectByPrimaryKey_OutputVariable"/>
+            <if name="ExistOrganizationBD">
+              <condition>count($Invoke_DB_ORGANIZATION_selectByPrimaryKey_OutputVariable.ScmOrganizationCollection/ns9:ScmOrganization) &gt; 0</condition>
+              <sequence name="Sequence4">
+                <assign name="Assign_RunReport">
+                  <copy>
+                    <from>$inputVariable.body/ns8:external_id</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport_process_InputVariable.payload/ns4:inventory[1]/ns4:locatorID</to>
+                  </copy>
+                  <copy>
+                    <from>$Invoke_DB_ORGANIZATION_selectByPrimaryKey_OutputVariable.ScmOrganizationCollection/ns9:ScmOrganization[1]/ns9:description</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport_process_InputVariable.payload/ns4:inventory[1]/ns4:xi_subinventory</to>
+                  </copy>
+                </assign>
+                <invoke name="Invoke_RunReport" bpelx:invokeAsDetail="no" partnerLink="RunReport"
+                        portType="ns4:ProcessRunReportBICSProv" operation="process"
+                        inputVariable="Invoke_RunReport_process_InputVariable"
+                        outputVariable="Invoke_RunReport_process_OutputVariable"/>
+                <if name="ExistOrganizationSCM">
+                  <condition>count($Invoke_RunReport_process_OutputVariable.payload/ns4:result/ns4:inventory) &gt; 0</condition>
+                  <sequence name="Sequence5">
+                    <assign name="Assign_RunReport2">
+                      <copy>
+                        <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_product_code</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport2_process_InputVariable.payload/ns4:inventory[1]/ns4:xi_product_code</to>
+                      </copy>
+                      <copy>
+                        <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_warehouse_id</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport2_process_InputVariable.payload/ns4:inventory[1]/ns4:xi_warehouse_id</to>
+                      </copy>
+                      <copy>
+                        <from>$inputVariable.body/ns8:xa_plan_code</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport2_process_InputVariable.payload/ns4:inventory[1]/ns4:xi_subinventory</to>
+                      </copy>
+                      <copy>
+                        <from>concat('',$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:invsn)</from>
+                        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_RunReport2_process_InputVariable.payload/ns4:inventory[1]/ns4:invsn</to>
+                      </copy>
+                    </assign>
+                    <invoke name="Invoke_RunReport2" partnerLink="RunReport" portType="ns4:ProcessRunReportBICSProv"
+                            operation="process" inputVariable="Invoke_RunReport2_process_InputVariable"
+                            outputVariable="Invoke_RunReport2_process_OutputVariable" bpelx:invokeAsDetail="no"/>
+                    <if name="ExistInventorySCM">
+                      <condition>count($Invoke_RunReport2_process_OutputVariable.payload/ns4:result/ns4:inventory) &gt; 0</condition>
+                      <assign name="Assign_Stock1">
+                        <copy>
+                          <from>$Invoke_RunReport2_process_OutputVariable.payload/ns4:result/ns4:inventory[1]/ns4:quantity</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vStock</to>
+                        </copy>
+                      </assign>
+                      <else>
+                        <assign name="Assign_Stock2">
+                          <copy>
+                            <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity</from>
+                            <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vStock</to>
+                          </copy>
+                        </assign>
+                      </else>
+                    </if>
+                    <if name="If_ExceedStock">
+                      <condition>number($inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity) &gt; $vStock</condition>
+                      <assign name="Assign_OutboundExceed"
+                              xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                        <copy>
+                          <from>$vUserOFSC</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                        </copy>
+                        <copy>
+                          <from>$inputVariable.body/ns8:company_msg</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                        </copy>
+                        <copy>
+                          <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                        </copy>
+                        <copy>
+                          <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                        </copy>
+                        <copy>
+                          <from>$inputVariable.body/ns8:message_id</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                        </copy>
+                        <copy>
+                          <from>"failed"</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                        </copy>
+                        <copy>
+                          <from>concat('La cantidad a instalar ', $inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity, ' excede el inventario actual ',   $vStock, '. FlowId:', ora:getFlowId() )</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                        </copy>
+                        <copy>
+                          <from>concat('#params?xi_activation_error=La cantidad a instalar ', $inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity, ' excede el inventario actual ',   $vStock, '&amp;amp;xi_activation_status=&amp;amp;xa_substatus=error_provisioning' )</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                        </copy>
+                        <copy>
+                          <from>true()</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                        </copy>
+                      </assign>
+                      <else>
+                        <sequence>
+                          <assign name="Assign_TranferInventory">
+                            <copy>
+                              <from>$inputVariable.body/ns8:eta</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:eta</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:service_window_end</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:service_window_end</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:service_window_start</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:service_window_start</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:sla_window_start</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:sla_window_start</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:sla_window_end</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:sla_window_end</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:customer_number</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:customer_number</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:pname</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:pname</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:cell</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:cell</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_code_bussiness</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_code_bussiness</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_subtype</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_subtype</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_technical_observations</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_technical_observations</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_start_comment</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_start_comment</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_cancellation_comment</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_cancellation_comment</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_suspended_comment</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_suspended_comment</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_activity_code</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_activity_code</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_geography</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_geography</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_comment_not_done</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_comment_not_done</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_completion_comment</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_completion_comment</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:integration_type</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:event</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:external_id</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:external_id</to>
+                            </copy>
+                            <copy>
+                              <from>concat('',$inputVariable.body/ns8:external_id_new)</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:external_id_new</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:appt_number</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:appt_number</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:date</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:date</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_plan_code</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:code_plan</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:city</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:city</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:time_delivered</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:time_delivered</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_number_ticket</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_number_ticket</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_product_code</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_product_code</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:organization_id</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:organization</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_reason_visit</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_reason_visit</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:message_id</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:message_id</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_nombre_plan</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_nombre_plan</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:xa_cost_center</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_cost_center</to>
+                            </copy>
+                            <copy>
+                              <from>$Invoke_RunReport_process_OutputVariable.payload/ns4:result/ns4:inventory[1]/ns4:xi_warehouse</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_flexifield1</to>
+                            </copy>
+                            <copy>
+                              <from>$Invoke_DB_ORGANIZATION_selectByPrimaryKey_OutputVariable.ScmOrganizationCollection/ns9:ScmOrganization[1]/ns9:description</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:xa_flexifield2</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_reason_remove</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_reason_remove</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_type_damage</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_type_damage</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_equipment_sold</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_equipment_sold</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_MAC</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_MAC</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_trademark</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_trademark</to>
+                            </copy>
+                            <copy>
+                              <from>concat('',$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:invsn)</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:invsn</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_product_code</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_product_code</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:invtype</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:invtype</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:quantity</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:quantity</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_catalog</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_catalog</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_segment</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_segment</to>
+                            </copy>
+                            <copy>
+                              <from>"PTN_CLIE"</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_warehouse</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_warehouse_id</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_warehouse_id</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_description_inventario</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_description_inventario</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_subinventory</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_subinventory</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_primary_quantity_uom</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_primary_quantity_uom</to>
+                            </copy>
+                            <copy>
+                              <from>$inputVariable.body/ns8:deinstalled_inventory/ns8:inventory[1]/ns8:xi_model</from>
+                              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_TransferInventory_process_InputVariable.payload/ns10:appoitment/ns10:inventories/ns10:inventory[1]/ns10:xi_model</to>
+                            </copy>
+                          </assign>
+                          <invoke name="Invoke_TransferInventory" bpelx:invokeAsDetail="no"
+                                  partnerLink="TransferInventory" portType="ns5:ProcessTransferInventoryOFSCtoSCMImpl"
+                                  operation="process" inputVariable="Invoke_TransferInventory_process_InputVariable"
+                                  outputVariable="Invoke_TransferInventory_process_OutputVariable"/>
+                          <if name="If_ErrorSCM">
+                            <condition>number($Invoke_TransferInventory_process_OutputVariable.payload/ns10:result) = -1</condition>
+                            <assign name="Assign_OutboundErrSCM"
+                                    xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                              <copy>
+                                <from>$vUserOFSC</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                              </copy>
+                              <copy>
+                                <from>$inputVariable.body/ns8:company_msg</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                              </copy>
+                              <copy>
+                                <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                              </copy>
+                              <copy>
+                                <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                              </copy>
+                              <copy>
+                                <from>$inputVariable.body/ns8:message_id</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                              </copy>
+                              <copy>
+                                <from>"failed"</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                              </copy>
+                              <copy>
+                                <from>concat('Error en la ejecución del proceso de desinstalación contra SCM por favor validar.. FlowId:', ora:getFlowId() )</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                              </copy>
+                              <copy>
+                                <from>'#params?xi_activation_error=Error en la ejecución del proceso de instalación contra SCM por favor validar.&amp;xi_activation_status=&amp;xa_substatus=error_provisioning'</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                              </copy>
+                              <copy>
+                                <from>true()</from>
+                                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                              </copy>
+                            </assign>
+                          </if>
+                        </sequence>
+                      </else>
+                    </if>
+                  </sequence>
+                  <else>
+                    <sequence name="Sequence6">
+                      <assign name="Assign_OutboundNoSCM"
+                              xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                        <copy>
+                          <from>$vUserOFSC</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                        </copy>
+                        <copy>
+                          <from>$inputVariable.body/ns8:company_msg</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                        </copy>
+                        <copy>
+                          <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                        </copy>
+                        <copy>
+                          <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                        </copy>
+                        <copy>
+                          <from>$inputVariable.body/ns8:message_id</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                        </copy>
+                        <copy>
+                          <from>"failed"</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                        </copy>
+                        <copy>
+                          <from>concat('No Es posible Encontrar la Organización del Recurso Técnico ', $inputVariable.body/ns8:external_id, '. FlowId:', ora:getFlowId() )  </from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                        </copy>
+                        <copy>
+                          <from>concat('#params?xi_activation_error=No Es posible Encontrar la Organización del Recurso Técnico ', $inputVariable.body/ns8:external_id, '&amp;amp;xi_activation_status=&amp;amp;xa_substatus=error_provisioning' )</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                        </copy>
+                        <copy>
+                          <from>true()</from>
+                          <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                        </copy>
+                      </assign>
+                    </sequence>
+                  </else>
+                </if>
+              </sequence>
+              <else>
+                <sequence name="Sequence7">
+                  <assign name="Assign_OutboundNoDB" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                    <copy>
+                      <from>$vUserOFSC</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                    </copy>
+                    <copy>
+                      <from>$inputVariable.body/ns8:company_msg</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                    </copy>
+                    <copy>
+                      <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                    </copy>
+                    <copy>
+                      <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                    </copy>
+                    <copy>
+                      <from>$inputVariable.body/ns8:message_id</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                    </copy>
+                    <copy>
+                      <from>"failed"</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                    </copy>
+                    <copy>
+                      <from>concat('No Está Configurada el Subinventario para Devoluciones. Por favor Valildar con el Administrador del Sistema. FlowId:', ora:getFlowId() )</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                    </copy>
+                    <copy>
+                      <from>'#params?xi_activation_error=No Está Configurada el Subinventario para Devoluciones. Por favor Valildar con el Administrador del Sistema.&amp;amp;xi_activation_status=&amp;amp;xa_substatus=error_provisioning'</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                    </copy>
+                    <copy>
+                      <from>true()</from>
+                      <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                    </copy>
+                  </assign>
+                </sequence>
+              </else>
+            </if>
+          </sequence>
+          <else>
+            <if name="FlagTrue">
+              <condition>$flagQuantityInvalid = true()</condition>
+              <assign name="Assign_InvokeOutboundInvalidQuantity">
+                <copy>
+                  <from>$vUserOFSC</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                </copy>
+                <copy>
+                  <from>$inputVariable.body/ns8:company_msg</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                </copy>
+                <copy>
+                  <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                </copy>
+                <copy>
+                  <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                </copy>
+                <copy>
+                  <from>$inputVariable.body/ns8:message_id</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                </copy>
+                <copy>
+                  <from>"failed"</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                </copy>
+                <copy>
+                  <from>$description</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                </copy>
+                <copy>
+                  <from>$data</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                </copy>
+                <copy>
+                  <from>true()</from>
+                  <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                </copy>
+              </assign>
+              <else>
+                <assign name="Assign_InvokeOutboundInvalidRecovery" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+                  <copy>
+                    <from>$vUserOFSC</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+                  </copy>
+                  <copy>
+                    <from>$inputVariable.body/ns8:company_msg</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+                  </copy>
+                  <copy>
+                    <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+                  </copy>
+                  <copy>
+                    <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+                  </copy>
+                  <copy>
+                    <from>$inputVariable.body/ns8:message_id</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+                  </copy>
+                  <copy>
+                    <from>"failed"</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+                  </copy>
+                  <copy>
+                    <from>concat('Error con valores de recuperación de equipo. Por favor Validar con el Administrador del Sistema. FlowId:', ora:getFlowId() )</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+                  </copy>
+                  <copy>
+                    <from>'#params?xi_activation_error= Error con valores de  recuperación de equipo. Por favor Validar con el Administrador del Sistema...&amp;amp;xi_activation_status=&amp;amp;xa_substatus=error_provisioning'</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+                  </copy>
+                  <copy>
+                    <from>true()</from>
+                    <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$vError</to>
+                  </copy>
+                </assign>
+              </else>
+            </if>
+          </else>
+        </if>
+      </sequence>
+    </if>
+    <if name="If_GetAuth" xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+      <condition>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:result/ns7:code = 0</condition>
+      <sequence name="Sequence1">
+        <if name="IfSuccess">
+          <condition>$vError = false()</condition>
+          <assign name="Assign_OutboundOK">
+            <copy>
+              <from>$vUserOFSC</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/login</to>
+            </copy>
+            <copy>
+              <from>$inputVariable.body/ns8:company_msg</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/company</to>
+            </copy>
+            <copy>
+              <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:now</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/now</to>
+            </copy>
+            <copy>
+              <from>$Invoke_CommonUtility_getAuth_OutputVariable.reply/ns7:data/ns7:auth</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/user/auth_string</to>
+            </copy>
+            <copy>
+              <from>$inputVariable.body/ns8:message_id</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/message_id</to>
+            </copy>
+            <copy>
+              <from>"delivered"</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/status</to>
+            </copy>
+            <copy>
+              <from>concat('Proceso de instalación de inventario ejecutado exitosamente. FlowId:',ora:getFlowId())</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/description</to>
+            </copy>
+            <copy>
+              <from>'#params?xi_activation_error=&amp;xi_activation_status=Inventario Desinstalado&amp;xa_substatus=validated&amp;xi_reason_remove='</from>
+              <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$Invoke_Outbound_set_message_status_InputVariable.parameters/messages/message/data</to>
+            </copy>
+          </assign>
+        </if>
+        <invoke name="Invoke_Outbound" bpelx:invokeAsDetail="no" partnerLink="OutboundOFSC" portType="ns6:ToaPortType"
+                operation="set_message_status" inputVariable="Invoke_Outbound_set_message_status_InputVariable"
+                outputVariable="Invoke_Outbound_set_message_status_OutputVariable"
+                xmlns:bpelx="http://schemas.oracle.com/bpel/extension"/>
+      </sequence>
+    </if>
+  </sequence>
+</process>

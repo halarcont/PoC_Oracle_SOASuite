@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="ProcessTransferInventoryOFSCtoSCMImpl" targetNamespace="http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:client="http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl" xmlns:ns1="urn:puntonet:ofsc:scm" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns2="http://schemas.oracle.com/bpel/extension" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+   <plnk:partnerLinkType name="ProcessTransferInventoryOFSCtoSCMImpl">
+      <plnk:role name="ProcessTransferInventoryOFSCtoSCMImplProvider" portType="client:ProcessTransferInventoryOFSCtoSCMImpl"/>
+   </plnk:partnerLinkType>
+   <wsdl:import namespace="http://schemas.oracle.com/bpel/extension" location="processtransferinventoryofsctoscmimpl_client_ep_WSDL_RuntimeFault.wsdl"/>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="urn:puntonet:ofsc:scm" schemaLocation="../Schemas/TransferInventorySCM.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="ProcessTransferInventoryOFSCtoSCMImplRequestMessage">
+      <wsdl:part name="payload" element="ns1:request"/>
+   </wsdl:message>
+   <wsdl:message name="ProcessTransferInventoryOFSCtoSCMImplResponseMessage">
+      <wsdl:part name="payload" element="ns1:response"/>
+   </wsdl:message>
+   <wsdl:portType name="ProcessTransferInventoryOFSCtoSCMImpl">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:ProcessTransferInventoryOFSCtoSCMImplRequestMessage"/>
+         <wsdl:output message="client:ProcessTransferInventoryOFSCtoSCMImplResponseMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="ProcessTransferInventoryOFSCtoSCMImplBinding" type="client:ProcessTransferInventoryOFSCtoSCMImpl">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="process">
+         <soap:operation style="document" soapAction="process"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="processtransferinventoryofsctoscmimpl_client_ep">
+      <wsdl:port name="ProcessTransferInventoryOFSCtoSCMImpl_pt" binding="client:ProcessTransferInventoryOFSCtoSCMImplBinding">
+         <soap:address location="http://soa.host.tst:9173/soa-infra/services/default/ProcessTransferInventoryOFSCtoSCMImpl/processtransferinventoryofsctoscmimpl_client_ep"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

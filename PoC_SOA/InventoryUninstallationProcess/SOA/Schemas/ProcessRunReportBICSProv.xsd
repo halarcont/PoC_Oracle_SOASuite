@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema xmlns:tns="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv" xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv">
+   <element name="process">
+      <complexType>
+         <sequence>
+            <element name="organizationCode" type="string"/>
+            <element name="inventory" type="tns:inventoryType"/>
+         </sequence>
+      </complexType>
+   </element>
+   <element name="processResponse">
+      <complexType>
+         <sequence>
+            <element name="result" type="tns:responseType"/>
+         </sequence>
+      </complexType>
+   </element>
+   <complexType name="inventoryType">
+      <sequence>
+         <element type="string" name="invsn"/>
+         <element type="string" name="invtype" minOccurs="1"/>
+         <element type="string" name="xi_description_inventario"/>
+         <element type="string" name="quantity"/>
+         <element type="string" name="xi_trademark"/>
+         <element type="string" name="xi_model"/>
+         <element type="string" name="xi_catalog"/>
+         <element type="string" name="xi_segment"/>
+         <element type="string" name="xi_primary_quantity_uom"/>
+         <element type="string" name="xi_warehouse"/>
+         <element type="string" name="xi_MAC"/>
+         <element type="string" name="xi_product_code" minOccurs="1"/>
+         <element type="string" name="xi_warehouse_id"/>
+         <element type="string" name="xi_subinventory"/>
+         <element type="string" name="locatorID"/>
+         <element type="string" name="isSerializable"/>
+         <element type="string" name="xi_inventory_asset_flag"/>
+      </sequence>
+   </complexType>
+   <complexType name="responseType">
+      <sequence>
+         <element type="string" name="message"/>
+         <element type="string" name="cause"/>
+         <element type="string" name="code"/>
+         <element type="tns:inventoryType" name="inventory" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>
+   </complexType>
+   <complexType name="faultType">
+      <sequence>
+         <element type="string" name="errorCode"/>
+         <element type="string" name="cause"/>
+         <element type="string" name="message"/>
+      </sequence>
+   </complexType>
+</schema>

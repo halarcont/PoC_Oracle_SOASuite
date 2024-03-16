@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="SubInventorySCM" targetNamespace="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/SubInventorySCM" xmlns:tns="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/SubInventorySCM" xmlns:inp1="http://TargetNamespace.com/SubInventario_SCM_Request" xmlns:inp2="http://TargetNamespace.com/SubInventario_SCM_Response" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+   <plnk:partnerLinkType name="SubInventorySCM">
+      <plnk:role name="SubInventorySCMProvider" portType="tns:SubInventorySCM_ptt"/>
+   </plnk:partnerLinkType>
+   <wsdl:types>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://TargetNamespace.com/SubInventario_SCM_Request" schemaLocation="../Schemas/SubInventoty_SCM_Request.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://TargetNamespace.com/SubInventario_SCM_Response" schemaLocation="../Schemas/SubInventory_SCM_Response.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="ConsultarSub_inputMessage">
+      <wsdl:part name="request" element="inp1:body_request_consult"/>
+   </wsdl:message>
+   <wsdl:message name="ConsultarSub_outputMessage">
+      <wsdl:part name="reply" element="inp2:body_response_consulta"/>
+   </wsdl:message>
+   <wsdl:message name="CrearSub_inputMessage">
+      <wsdl:part name="request" element="inp1:body_request"/>
+   </wsdl:message>
+   <wsdl:message name="CrearSub_outputMessage">
+      <wsdl:part name="reply" element="inp2:body_response"/>
+   </wsdl:message>
+   <wsdl:portType name="SubInventorySCM_ptt">
+      <wsdl:operation name="ConsultarSub">
+         <wsdl:input message="tns:ConsultarSub_inputMessage"/>
+         <wsdl:output message="tns:ConsultarSub_outputMessage"/>
+      </wsdl:operation>
+      <wsdl:operation name="CrearSub">
+         <wsdl:input message="tns:CrearSub_inputMessage"/>
+         <wsdl:output message="tns:CrearSub_outputMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+</wsdl:definitions>

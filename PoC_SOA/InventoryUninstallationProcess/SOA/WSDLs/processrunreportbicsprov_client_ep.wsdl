@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="ProcessRunReportBICSProv" targetNamespace="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:client="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:ns1="http://www.puntonet.org/bics" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+   <plnk:partnerLinkType name="ProcessRunReportBICSProv">
+      <plnk:role name="ProcessRunReportBICSProvProvider" portType="client:ProcessRunReportBICSProv"/>
+   </plnk:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv" schemaLocation="../Schemas/ProcessRunReportBICSProv.xsd"/>
+      </schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://www.puntonet.org/bics" schemaLocation="../Schemas/reportBI.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="ProcessRunReportBICSProvRequestMessage">
+      <wsdl:part name="payload" element="client:process"/>
+   </wsdl:message>
+   <wsdl:message name="ProcessRunReportBICSProvResponseMessage">
+      <wsdl:part name="payload" element="client:processResponse"/>
+   </wsdl:message>
+   <wsdl:portType name="ProcessRunReportBICSProv">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:ProcessRunReportBICSProvRequestMessage"/>
+         <wsdl:output message="client:ProcessRunReportBICSProvResponseMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="ProcessRunReportBICSProvBinding" type="client:ProcessRunReportBICSProv">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="process">
+         <soap:operation style="document" soapAction="process"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="processrunreportbicsprov_client_ep">
+      <wsdl:port name="ProcessRunReportBICSProv_pt" binding="client:ProcessRunReportBICSProvBinding">
+         <soap:address location="http://soa.host.tst:9173/soa-infra/services/default/ProcessRunReportBICSProv/processrunreportbicsprov_client_ep"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

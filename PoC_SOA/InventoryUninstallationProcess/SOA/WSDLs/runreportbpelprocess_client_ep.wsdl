@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="RunReportBPELProcess" targetNamespace="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:client="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+   <wsdl:documentation>
+      <abstractWSDL>http://soatst01-soa-0.subnetc.vcn.oraclevcn.com:9173/soa-infra/services/default/ProcessRunReportBICSQuantity!1.0/WSDLs/RunReportBPELProcess.wsdl</abstractWSDL>
+   </wsdl:documentation>
+   <plnk:partnerLinkType name="RunReportBPELProcess">
+      <plnk:role name="RunReportBPELProcessProvider" portType="client:RunReportBPELProcess"/>
+   </plnk:partnerLinkType>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess" schemaLocation="../Schemas/RunReportBPELProcess.xsd"/>
+      </schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:include schemaLocation="../Schemas/responseRunReport.xsd"/>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="RunReportBPELProcessRequestMessage">
+      <wsdl:part name="payload" element="client:process"/>
+   </wsdl:message>
+   <wsdl:message name="RunReportBPELProcessResponseMessage">
+      <wsdl:part name="payload" element="client:processResponse"/>
+   </wsdl:message>
+   <wsdl:portType name="RunReportBPELProcess">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:RunReportBPELProcessRequestMessage"/>
+         <wsdl:output message="client:RunReportBPELProcessResponseMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="RunReportBPELProcessBinding" type="client:RunReportBPELProcess">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+      <wsdl:operation name="process">
+         <soap:operation style="document" soapAction="process"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="runreportbpelprocess_client_ep">
+      <wsdl:port name="RunReportBPELProcess_pt" binding="client:RunReportBPELProcessBinding">
+         <soap:address location="http://soatst01-soa-0.subnetc.vcn.oraclevcn.com:9173/soa-infra/services/default/ProcessRunReportBICSQuantity/runreportbpelprocess_client_ep"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

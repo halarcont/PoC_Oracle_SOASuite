@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dgm:gDiagram xmlns:dgm="http://xmlns.oracle.com/sca/soadgm">
+    <dgm:gService name="ConsumeMsgInventoryUninstallation">
+        <dgm:body borderWidth="2" arcRad="20" X="21" Y="381" width="137" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="11" Y="374" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:outputPort name="ConsumeMsgInventoryUninstallation" X="127" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/jms/SOA_DEV/InventoryUninstallationProcess/ConsumeMsgInventoryUninstallation#wsdl.interface(Consume_Message_InvUninst_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/jms_adapter_20x20.png" X="20" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>Consume_Message_InvUninst</dgm:item>
+        </dgm:operations>
+    </dgm:gService>
+    <dgm:gReference name="CommonUtility">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="26" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="19" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="CommonUtility" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/CommonUtility#wsdl.interface(CommonUtility_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/RestAdapterService20x20px.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:policyIcon URI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/locked_12x12.png" X="118" Y="8" width="12" height="12"/>
+        <dgm:operations>
+            <dgm:item>getAuth</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="DB_ORGANIZATION">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="144" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="137" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="DB_ORGANIZATION" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/SOA_DEV/InventoryUninstallationProcess/DB_ORGANIZATION#wsdl.interface(DB_ORGANIZATION_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/db_adapter_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>selectByPrimaryKey</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="RunReport">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="262" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="255" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="RunReport" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv#wsdl.interface(ProcessRunReportBICSProv)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>process</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="TransferInventory">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="380" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="373" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="TransferInventory" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl#wsdl.interface(ProcessTransferInventoryOFSCtoSCMImpl)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>process</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="OutboundOFSC">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="498" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="491" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="OutboundOFSC" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="urn:toa:outbound#wsdl.interface(ToaPortType)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>set_message_status</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="SubInventorySCM">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="616" width="136" height="96">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="609" width="156" height="110">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="SubInventorySCM" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/SubInventorySCM#wsdl.interface(SubInventorySCM_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/RestAdapterService20x20px.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:policyIcon URI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/locked_12x12.png" X="118" Y="8" width="12" height="12"/>
+        <dgm:operations>
+            <dgm:item>ConsultarSub</dgm:item>
+            <dgm:item>CrearSub</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="ProduceJMSNotification">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="746" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="739" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="ProduceJMSNotification" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/jms/MyServiceSOA/InventoryUninstallationProcess/ProduceJMSNotification#wsdl.interface(Produce_Message_ptt)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/jms_adapter_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>Produce_Message</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gReference name="RunReportQuantity">
+        <dgm:body borderWidth="2" arcRad="20" X="816" Y="864" width="136" height="84">
+            <dgm:borderColor r="153" g="153" b="153"/>
+            <dgm:bgColor r="255" g="255" b="255"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="806" Y="857" width="156" height="98">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="RunReportQuantity" X="-10" Y="0" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess#wsdl.interface(RunReportBPELProcess)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/adapters/designtime/adapter/images/soap_service_20x20.png" X="27" Y="4" width="20" height="20"/>
+        <dgm:operations>
+            <dgm:item>process</dgm:item>
+        </dgm:operations>
+    </dgm:gReference>
+    <dgm:gComponent name="InventoryUninstallationBPEL">
+        <dgm:body borderWidth="2" arcRad="20" X="422" Y="366" width="130" height="236">
+            <dgm:borderColor r="69" g="113" b="140"/>
+            <dgm:lightBgColor r="166" g="208" b="230"/>
+            <dgm:darkBgColor r="99" g="162" b="201"/>
+        </dgm:body>
+        <dgm:shadow arcRad="20" X="412" Y="359" width="150" height="252">
+            <dgm:bgColor r="196" g="228" b="240"/>
+        </dgm:shadow>
+        <dgm:inputPort name="inventoryuninstallationbpel_client" X="-10" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/jms/SOA_DEV/InventoryUninstallationProcess/ConsumeMsgInventoryUninstallation#wsdl.interface(Consume_Message_InvUninst_ptt)"/>
+        <dgm:outputPort name="CommonUtility" X="120" Y="15" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/CommonUtility#wsdl.interface(CommonUtility_ptt)"/>
+        <dgm:outputPort name="DB_ORGANIZATION" X="120" Y="40" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/db/SOA_DEV/InventoryUninstallationProcess/DB_ORGANIZATION#wsdl.interface(DB_ORGANIZATION_ptt)"/>
+        <dgm:outputPort name="RunReport" X="120" Y="65" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv#wsdl.interface(ProcessRunReportBICSProv)"/>
+        <dgm:outputPort name="TransferInventory" X="120" Y="90" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl#wsdl.interface(ProcessTransferInventoryOFSCtoSCMImpl)"/>
+        <dgm:outputPort name="OutboundOFSC" X="120" Y="115" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="urn:toa:outbound#wsdl.interface(ToaPortType)"/>
+        <dgm:outputPort name="SubInventorySCM" X="120" Y="140" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ProyectoNOC_SOA/InventoryUninstallationProcess/SubInventorySCM#wsdl.interface(SubInventorySCM_ptt)"/>
+        <dgm:outputPort name="ProduceJMSNotification" X="120" Y="165" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/pcbpel/adapter/jms/MyServiceSOA/InventoryUninstallationProcess/ProduceJMSNotification#wsdl.interface(Produce_Message_ptt)"/>
+        <dgm:outputPort name="RunReportQuantity" X="120" Y="190" diameter="20" imageURI="oracle/tip/tools/ide/fabric/resource/image/visuals_rd1/servicereference.png" interface="http://xmlns.oracle.com/ParaPOCenSOA/ConsumirRunReportv1/RunReportBPELProcess#wsdl.interface(RunReportBPELProcess)"/>
+        <dgm:nodeIcon URI="/oracle/tip/tools/ide/bpel/shared/plugins/resources/images/soa/process_20x20.png" X="10" Y="4" width="20" height="20"/>
+    </dgm:gComponent>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/CommonUtility" target="CommonUtility" width="2">
+        <dgm:gSegment X1="562" Y1="391" X2="586" Y2="391"/>
+        <dgm:gSegment X1="586" Y1="391" X2="586" Y2="36"/>
+        <dgm:gSegment X1="586" Y1="36" X2="806" Y2="36"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/DB_ORGANIZATION" target="DB_ORGANIZATION" width="2">
+        <dgm:gSegment X1="562" Y1="416" X2="601" Y2="416"/>
+        <dgm:gSegment X1="601" Y1="416" X2="601" Y2="154"/>
+        <dgm:gSegment X1="601" Y1="154" X2="806" Y2="154"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/RunReport" target="RunReport" width="2">
+        <dgm:gSegment X1="562" Y1="441" X2="616" Y2="441"/>
+        <dgm:gSegment X1="616" Y1="441" X2="616" Y2="272"/>
+        <dgm:gSegment X1="616" Y1="272" X2="806" Y2="272"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/TransferInventory" target="TransferInventory" width="2">
+        <dgm:gSegment X1="562" Y1="466" X2="631" Y2="466"/>
+        <dgm:gSegment X1="631" Y1="466" X2="631" Y2="390"/>
+        <dgm:gSegment X1="631" Y1="390" X2="806" Y2="390"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/OutboundOFSC" target="OutboundOFSC" width="2">
+        <dgm:gSegment X1="562" Y1="491" X2="631" Y2="491"/>
+        <dgm:gSegment X1="631" Y1="491" X2="631" Y2="508"/>
+        <dgm:gSegment X1="631" Y1="508" X2="806" Y2="508"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="ConsumeMsgInventoryUninstallation" target="InventoryUninstallationBPEL/inventoryuninstallationbpel_client" width="2">
+        <dgm:gSegment X1="168" Y1="391" X2="412" Y2="391"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/SubInventorySCM" target="SubInventorySCM" width="2">
+        <dgm:gSegment X1="562" Y1="516" X2="616" Y2="516"/>
+        <dgm:gSegment X1="616" Y1="516" X2="616" Y2="626"/>
+        <dgm:gSegment X1="616" Y1="626" X2="806" Y2="626"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/ProduceJMSNotification" target="ProduceJMSNotification" width="2">
+        <dgm:gSegment X1="562" Y1="541" X2="601" Y2="541"/>
+        <dgm:gSegment X1="601" Y1="541" X2="601" Y2="756"/>
+        <dgm:gSegment X1="601" Y1="756" X2="806" Y2="756"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+    <dgm:gWireLink source="InventoryUninstallationBPEL/RunReportQuantity" target="RunReportQuantity" width="2">
+        <dgm:gSegment X1="562" Y1="566" X2="586" Y2="566"/>
+        <dgm:gSegment X1="586" Y1="566" X2="586" Y2="874"/>
+        <dgm:gSegment X1="586" Y1="874" X2="806" Y2="874"/>
+        <dgm:baseColor r="153" g="153" b="153"/>
+        <dgm:selectedColor r="49" g="106" b="196"/>
+    </dgm:gWireLink>
+</dgm:gDiagram>

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" xmlns:edl="http://schemas.oracle.com/events/edl" xmlns="http://schemas.oracle.com/soa/configplan">
+   <composite name="InventoryUninstallationProcess">
+      <import>
+         <searchReplace>
+            <search/>
+            <replace/>
+         </searchReplace>
+      </import>
+      <service name="ConsumeMsgInventoryUninstallation">
+         <binding type="jca">
+            <property name="useRejectedMessageRecovery">
+               <replace>true</replace>
+            </property>
+         </binding>
+      </service>
+      <property name="productVersion">
+         <replace>12.2.1.4.0.190828</replace>
+      </property>
+      <property name="compositeID">
+         <replace>8bc7af67-db5e-43e3-80d6-2e4d47d5a4c3</replace>
+      </property>
+      <component name="InventoryUninstallationBPELProcess">
+         <property name="bpel.config.transaction">
+            <replace>requiresNew</replace>
+         </property>
+         <property name="bpel.config.oneWayDeliveryPolicy">
+            <replace>sync</replace>
+         </property>
+         <property name="bpel.preference.clientSecret">
+            <replace>d0aa7c7f6ceed2711f6f667a333699f5cf222504e10d67e35049be590037497d</replace>
+         </property>
+      </component>
+      <reference name="CommonUtility">
+         <binding type="rest">
+            <attribute name="location">
+               <replace>http://soa.host.tst:9173/soa-infra/resources/default/CommonUtilitySOA/Common/</replace>
+            </attribute>
+         </binding>
+      </reference>
+      <reference name="DB_ORGANIZATION">
+         <binding type="jca">
+            <property name="jca.retry.count">
+               <replace>4</replace>
+            </property>
+            <property name="jca.retry.interval">
+               <replace>1</replace>
+            </property>
+            <property name="jca.retry.backoff">
+               <replace>2</replace>
+            </property>
+            <property name="jca.retry.maxInterval">
+               <replace>120</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="RunReport">
+         <binding type="ws">
+            <attribute name="port">
+               <replace>http://xmlns.oracle.com/puntonet/ProcessRunReportBICSProv#wsdl.endpoint(processrunreportbicsprov_client_ep/ProcessRunReportBICSProv_pt)</replace>
+            </attribute>
+            <attribute name="location">
+               <replace>WSDLs/processrunreportbicsprov_client_ep.wsdl</replace>
+            </attribute>
+            <property name="weblogic.wsee.wsat.transaction.flowOption">
+               <replace>WSDLDriven</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="TransferInventory">
+         <binding type="ws">
+            <attribute name="port">
+               <replace>http://xmlns.oracle.com/puntonet/ProcessTransferInventoryOFSCtoSCMImpl#wsdl.endpoint(processtransferinventoryofsctoscmimpl_client_ep/ProcessTransferInventoryOFSCtoSCMImpl_pt)</replace>
+            </attribute>
+            <attribute name="location">
+               <replace>WSDLs/processtransferinventoryofsctoscmimpl_client_ep.wsdl</replace>
+            </attribute>
+            <property name="weblogic.wsee.wsat.transaction.flowOption">
+               <replace>WSDLDriven</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="OutboundOFSC">
+         <binding type="ws">
+            <attribute name="port">
+               <replace>urn:toa:outbound#wsdl.endpoint(toa_outbound_interface/toa_outbound_interface)</replace>
+            </attribute>
+            <attribute name="location">
+               <replace>WSDLs/outboundPS.wsdl</replace>
+            </attribute>
+            <property name="weblogic.wsee.wsat.transaction.flowOption">
+               <replace>WSDLDriven</replace>
+            </property>
+         </binding>
+      </reference>
+      <reference name="SubInventorySCM">
+         <binding type="rest">
+            <attribute name="location">
+               <replace>https://eiqv-test.fa.us6.oraclecloud.com/fscmRestApi/resources/11.13.18.05/subinventories</replace>
+            </attribute>
+         </binding>
+      </reference>
+   </composite>
+   <wsdlAndSchema name="Adapters/ConsumeMsgInventoryUninstallation_jms.jca|Adapters/DB_ORGANIZATION_db.jca|Schemas/DB_ORGANIZATION_table.xsd|Schemas/ProcessRunReportBICSProv.xsd|Schemas/reportBI.xsd|Schemas/TransferInventorySCM.xsd|WSDLs/CommonUtility.wsdl|WSDLs/ConsumeMsgInventoryUninstallation.wsdl|WSDLs/DB_ORGANIZATION.wsdl|WSDLs/InventoryUninstallationBPELProcess.wsdl|WSDLs/outboundPS.wsdl|WSDLs/outboundPSWrapper.wsdl|WSDLs/processrunreportbicsprov_client_ep.wsdl|WSDLs/processtransferinventoryofsctoscmimpl_client_ep.wsdl|WSDLs/processtransferinventoryofsctoscmimpl_client_ep_WSDL_RuntimeFault.wsdl">
+      <searchReplace>
+         <search>HOSTNAME_SOACS</search>
+         <replace>soa.host.tst:9173</replace>
+      </searchReplace>
+   </wsdlAndSchema>
+</SOAConfigPlan>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="ConsumeMsgInventoryUninstallation" adapter="jms" wsdlLocation="../WSDLs/ConsumeMsgInventoryUninstallation.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory UIConnectionName="SOATST01" location="eis/jms/IntegrationOFSCTopic" UIJmsProvider="WLSJMS"/>
+   <endpoint-activation portType="Consume_Message_InvUninst_ptt" operation="Consume_Message_InvUninst">
+      <activation-spec className="oracle.tip.adapter.jms.inbound.JmsConsumeActivationSpec">
+         <property name="DestinationName" value="jms/IntegrationOFSCTopic"/>
+         <property name="UseMessageListener" value="false"/>
+         <property name="MessageSelector" value="mskey='Desinstallated_Equipment'"/>
+         <property name="PayloadType" value="TextMessage"/>
+      </activation-spec>
+   </endpoint-activation>
+</adapter-config>

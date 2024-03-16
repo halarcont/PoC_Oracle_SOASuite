@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns0="http://TargetNamespace.com/SubInventario_SCM_Request" xmlns="http://wadl.dev.java.net/2009/02">
+   <doc title="SubInventorySCM">RestReference</doc>
+   <grammars>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://TargetNamespace.com/SubInventario_SCM_Request" schemaLocation="../Schemas/SubInventoty_SCM_Request.xsd"/>
+      </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://TargetNamespace.com/SubInventario_SCM_Response" schemaLocation="../Schemas/SubInventory_SCM_Response.xsd"/>
+      </xsd:schema>
+   </grammars>
+   <resources>
+      <resource path="/">
+         <method name="GET" soa:wsdlOperation="ConsultarSub">
+            <request soa:paramElement="pns:body_request_consult" xmlns:pns="http://TargetNamespace.com/SubInventario_SCM_Request">
+               <param name="q" style="query" soa:expression="$msg.request/ns0:q" type="xsd:string"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/json" element="cns:body_response_consulta" xmlns:cns="http://TargetNamespace.com/SubInventario_SCM_Response"/>
+            </response>
+         </method>
+      </resource>
+      <resource path="/?onlyData=true">
+         <method name="POST" soa:wsdlOperation="CrearSub">
+            <request>
+               <representation mediaType="application/json" element="cns:body_request" xmlns:cns="http://TargetNamespace.com/SubInventario_SCM_Request"/>
+            </request>
+            <response status="201">
+               <representation mediaType="application/json" element="cns:body_response" xmlns:cns="http://TargetNamespace.com/SubInventario_SCM_Response"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>

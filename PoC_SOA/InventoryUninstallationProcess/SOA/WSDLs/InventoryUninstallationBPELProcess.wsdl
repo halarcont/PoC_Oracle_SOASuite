@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="InventoryUninstallationBPELProcess" targetNamespace="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/InventoryUninstallationBPELProcess" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:client="http://xmlns.oracle.com/SOA_DEV/InventoryUninstallationProcess/InventoryUninstallationBPELProcess" xmlns:ns1="puntonet:oracle:ofsc" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema">
+         <import namespace="puntonet:oracle:ofsc" schemaLocation="oramds:/apps/soa/xsd/InputBodyIntegrationOFSC.xsd"/>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="InventoryUninstallationBPELProcessRequestMessage">
+      <wsdl:part name="payload" element="ns1:body"/>
+   </wsdl:message>
+   <wsdl:portType name="InventoryUninstallationBPELProcess">
+      <wsdl:operation name="process">
+         <wsdl:input message="client:InventoryUninstallationBPELProcessRequestMessage"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <plnk:partnerLinkType name="InventoryUninstallationBPELProcess">
+      <plnk:role name="InventoryUninstallationBPELProcessProvider" portType="client:InventoryUninstallationBPELProcess"/>
+   </plnk:partnerLinkType>
+</wsdl:definitions>

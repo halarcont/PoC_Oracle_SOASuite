@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+   <xs:complexType name="DATA_DS_CT">
+      <xs:sequence>
+         <xs:element name="G_1">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element name="ON_HAND_QUANTITY" type="xs:unsignedByte"/>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="DATA_DS_ELEMENT" type="DATA_DS_CT"/>
+</xs:schema>

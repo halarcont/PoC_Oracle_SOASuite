@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="toa_outbound_interface" targetNamespace="urn:toa:outbound" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:bpws="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:WL5G3N1="urn:toa:outbound" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+   <plnk:partnerLinkType name="OutboundOFSC">
+      <plnk:role name="ToaPortType" portType="WL5G3N1:ToaPortType"/>
+   </plnk:partnerLinkType>
+   <wsdl:import namespace="urn:toa:outbound" location="outboundPS.wsdl"/>
+</wsdl:definitions>

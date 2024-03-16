@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<adapter-config name="DB_ORGANIZATION" adapter="db" wsdlLocation="../WSDLs/DB_ORGANIZATION.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+   <connection-factory UIConnectionName="PTN_INTEGRATION_TEST" location="eis/DB/PTN_Integration"/>
+   <endpoint-interaction portType="DB_ORGANIZATION_ptt" operation="selectByPrimaryKey">
+      <interaction-spec className="oracle.tip.adapter.db.DBReadInteractionSpec">
+         <property name="DescriptorName" value="DB_ORGANIZATION.ScmOrganization"/>
+         <property name="QueryName" value="readObject"/>
+         <property name="MappingsMetaDataURL" value="DB_ORGANIZATION-or-mappings.xml"/>
+         <property name="GetActiveUnitOfWork" value="false"/>
+      </interaction-spec>
+   </endpoint-interaction>
+</adapter-config>

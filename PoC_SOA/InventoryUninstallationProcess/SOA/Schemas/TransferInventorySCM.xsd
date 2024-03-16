@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:puntonet:ofsc:scm" targetNamespace="urn:puntonet:ofsc:scm" elementFormDefault="qualified">
+   <xsd:element name="request" type="tns:requestType"/>
+   <xsd:element name="response" type="tns:responseType"/>
+   <xsd:complexType name="requestType">
+      <xsd:sequence>
+         <xsd:annotation>
+            <xsd:documentation>ID de la Transaction</xsd:documentation>
+         </xsd:annotation>
+         <xsd:element type="xsd:string" name="transactionId" minOccurs="1"/>
+         <xsd:element type="xsd:string" name="event" minOccurs="1"/>
+         <xsd:element type="tns:appoitmentType" name="appoitment"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="responseType">
+      <xsd:sequence>
+         <xsd:element type="xsd:string" name="message"/>
+         <xsd:element type="xsd:string" name="cause"/>
+         <xsd:element type="xsd:string" name="code"/>
+         <xsd:element type="xsd:string" name="result"/>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="appoitmentType">
+      <xsd:sequence>
+         <xsd:element name="message_id" type="xsd:string" minOccurs="1"/>
+         <xsd:element name="appt_number" type="xsd:string"/>
+         <xsd:element name="external_id" type="xsd:string"/>
+         <xsd:element name="external_id_new" type="xsd:string"/>
+         <xsd:element name="xa_number_ticket" type="xsd:int"/>
+         <xsd:element name="date" type="xsd:string"/>
+         <xsd:element name="eta" type="xsd:string"/>
+         <xsd:element name="time_delivered" type="xsd:string"/>
+         <xsd:element name="service_window_end" type="xsd:string"/>
+         <xsd:element name="service_window_start" type="xsd:string"/>
+         <xsd:element name="sla_window_start" type="xsd:string"/>
+         <xsd:element name="sla_window_end" type="xsd:string"/>
+         <xsd:element name="customer_number" type="xsd:string"/>
+         <xsd:element name="code_plan" type="xsd:string"/>
+         <xsd:element name="customer_organization" type="xsd:string"/>
+         <xsd:element name="pname" type="xsd:string"/>
+         <xsd:element name="cell" type="xsd:string"/>
+         <xsd:element name="city" type="xsd:string"/>
+         <xsd:element name="organization" type="xsd:string"/>
+         <xsd:element name="xa_code_bussiness" type="xsd:string"/>
+         <xsd:element name="xa_activity_code" type="xsd:string"/>
+         <xsd:element name="xa_geography" type="xsd:string"/>
+         <xsd:element name="xa_reason_visit" type="xsd:string"/>
+         <xsd:element name="xa_product_code" type="xsd:string"/>
+         <xsd:element name="xa_subtype" type="xsd:string"/>
+         <xsd:element name="xa_technical_observations" type="xsd:string"/>
+         <xsd:element name="xa_start_comment" type="xsd:string"/>
+         <xsd:element name="xa_cancellation_comment" type="xsd:string"/>
+         <xsd:element name="xa_suspended_comment" type="xsd:string"/>
+         <xsd:element name="xa_comment_not_done" type="xsd:string"/>
+         <xsd:element name="xa_completion_comment" type="xsd:string"/>
+         <xsd:element name="xa_break_reason" type="xsd:string"/>
+         <xsd:element name="xa_reason_interruption" type="xsd:string"/>
+         <xsd:element name="xa_causal_of_solution" type="xsd:string"/>
+         <xsd:element name="xa_flexifield1" type="xsd:string"/>
+         <xsd:element name="xa_flexifield2" type="xsd:string"/>
+         <xsd:element name="xa_flexifield3" type="xsd:string"/>
+         <xsd:element name="xa_flexifield4" type="xsd:string"/>
+         <xsd:element name="xa_nombre_plan" type="xsd:string"/>
+         <xsd:element name="xa_cost_center" type="xsd:string"/>
+         <xsd:element name="xa_plan_speed" type="xsd:string"/>
+         <xsd:element name="inventories">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element type="tns:inventoryType" name="inventory" minOccurs="1" maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+      </xsd:sequence>
+   </xsd:complexType>
+   <xsd:complexType name="inventoryType">
+      <xsd:sequence>
+         <xsd:element type="xsd:string" name="invid"/>
+         <xsd:element type="xsd:string" name="invsn"/>
+         <xsd:element type="xsd:string" name="invtype"/>
+         <xsd:element type="xsd:string" name="xi_description_inventario"/>
+         <xsd:element type="xsd:string" name="quantity"/>
+         <xsd:element type="xsd:string" name="xi_trademark"/>
+         <xsd:element type="xsd:string" name="xi_model"/>
+         <xsd:element type="xsd:string" name="xi_MAC"/>
+         <xsd:element type="xsd:string" name="xi_product_code"/>
+         <xsd:element type="xsd:string" name="xi_catalog"/>
+         <xsd:element type="xsd:string" name="xi_segment"/>
+         <xsd:element type="xsd:string" name="xi_warehouse"/>
+         <xsd:element type="xsd:string" name="xi_warehouse_id"/>
+         <xsd:element type="xsd:string" name="xi_subinventory"/>
+         <xsd:element type="xsd:string" name="xi_primary_quantity_uom"/>
+         <xsd:element type="xsd:string" name="xi_reason_remove"/>
+         <xsd:element type="xsd:string" name="xi_type_damage"/>
+         <xsd:element type="xsd:string" name="xi_equipment_sold"/>
+         <xsd:element type="xsd:string" name="xi_recovery_equipment"/>
+         <xsd:element type="xsd:string" name="xi_inventory_asset_flag"/>
+         <xsd:element type="xsd:string" name="xi_serializable"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://xmlns.ec.com.puntonet/Common/Utility/SOA" xmlns="http://wadl.dev.java.net/2009/02">
+   <doc title="CommonUtility">RestReference</doc>
+   <grammars>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+         <xsd:import namespace="http://xmlns.ec.com.puntonet/Common/Utility/SOA" schemaLocation="oramds:/apps/soa/xsd/CommonUtilitySOA.xsd"/>
+      </xsd:schema>
+   </grammars>
+   <resources>
+      <resource path="/generate/auth/ofsc/">
+         <method name="POST" soa:wsdlOperation="getAuth">
+            <request>
+               <representation mediaType="application/json" element="cns:requestGenAuthFS" xmlns:cns="http://xmlns.ec.com.puntonet/Common/Utility/SOA"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/json" element="cns:responseGenAuthFS" xmlns:cns="http://xmlns.ec.com.puntonet/Common/Utility/SOA"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>

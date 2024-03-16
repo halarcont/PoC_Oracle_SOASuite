@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/DB_ORGANIZATION" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/top/DB_ORGANIZATION" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ScmOrganizationCollection" type="ScmOrganizationCollection"/>
+   <xs:complexType name="ScmOrganizationCollection">
+      <xs:sequence>
+         <xs:element name="ScmOrganization" type="ScmOrganization" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ScmOrganization">
+      <xs:sequence>
+         <xs:element name="code" type="string50"/>
+         <xs:element name="typeOrg" type="string50" minOccurs="0"/>
+         <xs:element name="description" type="string200" minOccurs="0"/>
+         <xs:element name="state" type="xs:int" minOccurs="0" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ScmOrganizationPrimaryKey" type="ScmOrganizationPrimaryKey"/>
+   <xs:complexType name="ScmOrganizationPrimaryKey">
+      <xs:sequence>
+         <xs:element name="code" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="string50">
+      <xs:restriction base="xs:string">
+         <xs:maxLength value="50"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="string200">
+      <xs:restriction base="xs:string">
+         <xs:maxLength value="200"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>
