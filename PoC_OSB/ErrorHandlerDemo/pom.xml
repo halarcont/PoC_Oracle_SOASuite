@@ -3,17 +3,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.oracle.servicebus</groupId>
+        <artifactId>sbar-project-common</artifactId>
+        <version>12.2.1-3-0</version>
+    </parent>
+
     <groupId>PoC_OSB</groupId>
-    <artifactId>PoC_OSB</artifactId>
+    <artifactId>ErrorHandlerDemo</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>pom</packaging>
+    <packaging>sbar</packaging>
 
-    <modules>
-        <module>System</module>
-        <module>EXP_Calculadora</module>
-        <module>CON_Calculadora</module>
-        <module>ErrorHandlerDemo</module>
-    </modules>
+    <description/>
 
 </project>

@@ -5,9 +5,9 @@
    <iconize/>
    <partnerlink_locations>
       <partnerlink name="calculoprocess_client" x="0" y="270" side="left"/>
-      <partnerlink name="CalculoService" x="1023" y="284" side="right"/>
+      <partnerlink name="CalculoService" x="988" y="284" side="right"/>
    </partnerlink_locations>
-   <graph_layout viewport="0,0,1141,528" show_swimlanes="true">
+   <graph_layout viewport="0,0,1106,595" show_swimlanes="true">
       <layout_item collapsed="false" xpath="/process" type="process" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/faultHandlers/catch" type="catch"/>
       <layout_item collapsed="false" xpath="/process/faultHandlers/catch/sequence" type="sequence"/>
