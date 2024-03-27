@@ -59,6 +59,6 @@
       </hash>
    </hash>
    <hash n="oracle.sb.tooling.ide.core.internal.application.SbApplication">
-      <value n="configContextSessionName" v="OSB-IDE_build_1710641407872"/>
+      <value n="configContextSessionName" v="OSB-IDE_build_1710656381287"/>
    </hash>
 </jws:workspace>

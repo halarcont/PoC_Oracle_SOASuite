@@ -25,6 +25,7 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/ResourceBundlesContentSet"/>
    </list>
    <list n="listOfChildren">
+      <hash><url n="URL" path="Base64EncoderDemo/Base64EncoderDemo.jpr"/></hash>
       <hash><url n="URL" path="Calculadora/Calculadora.jpr"/></hash>
       <hash><url n="URL" path="CalculadoraSOA/CalculadoraSOA.jpr"/></hash>
       <hash><url n="URL" path="InventoryUninstallationProcess/InventoryUninstallationProcess.jpr"/></hash>
