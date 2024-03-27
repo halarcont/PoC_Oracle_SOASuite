@@ -1,0 +1,63 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer
+
+  Created: Wed Mar 27 00:31:27 CDT 2024
+  Author:  herit
+  Type: BPEL 2.0 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="BPELProcess"
+               targetNamespace="http://xmlns.oracle.com/PoC_SOA/RestServiceDemo/BPELProcess"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/PoC_SOA/RestServiceDemo/BPELProcess"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="json"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap">
+
+  <!--
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC
+     Set of activities coordinating the flow of messages across the
+     services integrated within this business process
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <partnerLinks>
+    <partnerLink name="getNameRestService" bpelx:wadl="yes"/>
+  </partnerLinks>
+  <variables>
+    <variable name="DummyVariable" type="xsd:string"/>
+    <variable name="fNameVar" type="xsd:string"/>
+    <variable name="lNameVar" type="xsd:string"/>
+    <variable name="JsonObjVar" bpelx:json="string"/>
+  </variables>
+  <sequence name="main">
+    <receive name="ReceiveNames" createInstance="yes" partnerLink="getNameRestService" variable="DummyVariable"
+             bpelx:method="getName">
+      <bpelx:fromProperties>
+        <bpelx:fromProperty name="rest.query.fname" variable="fNameVar"/>
+        <bpelx:fromProperty name="rest.query.lname" variable="lNameVar"/>
+      </bpelx:fromProperties>
+    </receive>
+    <assign name="AssignName">
+      <copy>
+        <from>concat('Hello ',$fNameVar,' ',$lNameVar)</from>
+        <to expressionLanguage="javascript">process.JsonObjVar</to>
+      </copy>
+    </assign>
+    <reply name="ReplyCompleteName" partnerLink="getNameRestService" variable="JsonObjVar" bpelx:method="getName"/>
+  </sequence>
+</process>
